@@ -1,0 +1,110 @@
+<form #appointmentForm="ngForm" (ngSubmit)="onSubmit(appointmentForm)">
+    <input type="hidden" name="$key" #$key="ngModel" [(ngModel)]="_caleventService.selectedAppointment.$key">
+    
+    <div class="row container col-md-12">
+        <div class="form-group col-md-6">
+            <label>Full Name</label>
+            <input class="form-control" name="name" #firstname="ngModel" [(ngModel)]="_caleventService.selectedAppointment.name" placeholder="Full Name" required>
+        </div>
+        <div class="form-group col-md-6">
+            <label>Phone</label>
+            <input class="form-control" placeholder="+1 (xxx) xxx-xxxx" [textMask]="{mask: mask}" name="phone" #lastname="ngModel" [(ngModel)]="_caleventService.selectedAppointment.phone" pattern="\+\d\d{10}"/>
+        </div>
+    </div>
+        <!--
+            <div class="form-group">
+                <label>Gender</label>
+                <input class="form-control" name="gender" #gender="ngModel" [(ngModel)]="_caleventService.selectedAppointment.gender" placeholder="Male Or Female">
+            </div>
+        -->
+        
+
+    <div class="row container col-md-12">
+            <div class="form-group col-md-6">
+                <label>Service</label>
+                <input class="form-control" list="services" name="service" #service="ngModel" [(ngModel)]="_caleventService.selectedAppointment.service" placeholder="Service">
+                <datalist id="services">
+                    <option>Waxing </option>
+                    <option>Trimming</option>
+                    <option>Laser</option>
+                    <option>Hair Cut</option>
+                    <option>Facial</option>
+                </datalist>
+            </div>
+     
+
+
+        <div class="form-group col-md-6">
+            <label>Stylist:</label>
+            <input type="radio" name="stylist_title" value="Gurpreet" [(ngModel)]="_caleventService.selectedAppointment.stylist_title"> Gurpreet
+            <input type="radio" name="stylist_title" value="Meena" [(ngModel)]="_caleventService.selectedAppointment.stylist_title"> Meena
+            <input type="radio" name="stylist_title" value="Other" [(ngModel)]="_caleventService.selectedAppointment.stylist_title"> Other
+            <div class="form-group col-md-12">
+                <input class="form-control" list="stylist" name="stylist_title" #stylist_title="ngModel" [(ngModel)]="_caleventService.selectedAppointment.stylist_title" placeholder="Stylist">
+            </div>
+        </div>
+
+     </div>
+
+    <!--Radio Button-->
+    <div class="row container col-md-12">
+        <div class="form-group col-md-12">
+            <label>Gender:</label><br />
+            <input type="radio" name="gender" value="M" [(ngModel)]="_caleventService.selectedAppointment.gender"> Male
+            <input type="radio" name="gender" value="F" [(ngModel)]="_caleventService.selectedAppointment.gender"> Female
+        </div>
+ <!--       <div class="form-group col-md-6">
+            <label>Stylist:</label><br />
+            <input type="radio" name="stylist_title" value="Gurpreet" [(ngModel)]="_caleventService.selectedAppointment.stylist_title"> Gurpreet
+            <input type="radio" name="stylist_title" value="Meena" [(ngModel)]="_caleventService.selectedAppointment.stylist_title"> Meena
+            <input type="radio" name="stylist_title" value="Other" [(ngModel)]="_caleventService.selectedAppointment.stylist_title" [checked]="options"> Other
+            <div  class="form-group col-md-12"> 
+                
+                    <input class="form-control" list="stylist" name="stylist_title" #stylist_title="ngModel" [(ngModel)]="_caleventService.selectedAppointment.stylist_title" placeholder="Stylist">
+             
+            </div>
+        </div>
+        -->
+    </div>
+        <div class="row container col-md-12">
+            <div class="form-group col-md-6">
+                <label>Starts at</label>
+                <mwl-demo-utils-date-time-picker class="form-control"
+                                                 name="start"
+                                                 #start="ngModel"
+                                                 [(ngModel)]="_caleventService.selectedAppointment.start"
+                                                 (ngModelChange)="refresh.next()"
+                                                 placeholder="Not set">
+                </mwl-demo-utils-date-time-picker>
+
+            </div>
+            <div class="form-group col-md-6">
+                <label>Ends at</label>
+                <mwl-demo-utils-date-time-picker class="form-control"
+                                                 name="end"
+                                                 #end="ngModel"
+                                                 [(ngModel)]="_caleventService.selectedAppointment.end"
+                                                 (ngModelChange)="refresh.next()"
+                                                 placeholder="Not set">
+                </mwl-demo-utils-date-time-picker>
+
+            </div>
+        </div>
+        <div class="row container col-md-12">
+            <div class="form-group col-md-12">
+                <label>Notes</label>
+                <textarea class="form-control" name="notes" #lastname="ngModel" [(ngModel)]="_caleventService.selectedAppointment.notes" placeholder="Notes"></textarea>
+            </div>
+        </div>
+        <div class="form-group col-md-12">
+            <button type="submit" class="btn btn-default" [disabled]="!appointmentForm.valid">
+                <i class="fa fa-floppy-o"></i> Submit
+            </button>
+            <button type="button" class="btn btn-default" *ngIf="_caleventService.selectedAppointment.$key!=null" (click)="onDelete(appointmentForm)">
+                <i class="fa fa-trash"></i> Delete
+            </button>
+            <button type="button" class="btn btn-default" (click)="resetForm(appointmentForm)">
+                <i class="fa fa-repeat"></i> Reset
+            </button>
+        </div>
+</form>

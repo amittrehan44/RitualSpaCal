@@ -1,0 +1,6 @@
+<ul class="list-group hover">
+
+    <li class="list-group-item" *ngFor="let appointment of todaysAppointment" (click)="onItemClick(appointment)">
+        <strong>{{appointment.start | date: 'shortTime'}} </strong> {{appointment.stylist_title}}: {{appointment.name}}{{appointment.phone}}({{appointment.service}})
+    </li>
+</ul>
