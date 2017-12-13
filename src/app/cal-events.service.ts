@@ -68,6 +68,7 @@ export class CalEventsService {
     insertAppointment(appointment: eventsAPI) {
         //this.e164 = "+1" + appointment.phone.substring(4, 7) + appointment.phone.substring(9, 12) + appointment.phone.substring(13, 17);
         //console.log(this.e164);
+        console.log(addHours(appointment.start, 2));
         this.appointmentList.push({
             
             name: appointment.name,
@@ -86,7 +87,7 @@ export class CalEventsService {
     updateAppointment(appointment: eventsAPI) {
         //this.e164 = "+1" + appointment.phone.substring(4, 7) + appointment.phone.substring(9, 12) + appointment.phone.substring(13, 17);
         this.appointmentList.update(appointment.$key, {
-            firstname: appointment.name,
+            name: appointment.name,
             phone: appointment.phone,
             service: appointment.service,
             gender: appointment.gender,

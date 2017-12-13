@@ -36,7 +36,7 @@ export class AuthGuard implements CanActivate {
                           alert("user is not authorised to login, please contact Admin");
                       }
 */
-                      if (['amit.trehan44@gmail.com', 'cdhingra999@gmail.com', 'mango', 'pineapple'].indexOf(user.email) < 0) {
+                      if (['amit.trehan44@gmail.com', 'cdhingra99@gmail.com', 'varun6369@gmail.com', 'pineapple'].indexOf(user.email) < 0) {
                           console.log('access denied')
                           this.router.navigate(['/login']);
                           alert("user is not authorised to login, please contact Admin");

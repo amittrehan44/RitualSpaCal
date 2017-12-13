@@ -30,6 +30,8 @@ export class AppointmentInputComponent implements OnInit {
 
     //mask: any[] = ['+', '1', ' ', '(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
     mask: any[] = ['+', '1', /[1-9]/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/];
+    mask1: any[] = [/[0-9]/, ':', /[0-6]/, /[0-9]/];
+    mask2: any[] = [/^[0-9]+(\.[0-9]{1,2})?$/];
 
     constructor(private _caleventService: CalEventsService, private modal: NgbModal) { }
 

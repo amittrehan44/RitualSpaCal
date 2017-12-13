@@ -4,11 +4,11 @@
     <div class="row container col-md-12">
         <div class="form-group col-md-6">
             <label>Full Name</label>
-            <input class="form-control" name="name" #firstname="ngModel" [(ngModel)]="_caleventService.selectedAppointment.name" placeholder="Full Name" required>
+            <input class="form-control" name="name" #name="ngModel" [(ngModel)]="_caleventService.selectedAppointment.name" placeholder="Full Name" required>
         </div>
         <div class="form-group col-md-6">
             <label>Phone</label>
-            <input class="form-control" placeholder="+1 (xxx) xxx-xxxx" [textMask]="{mask: mask}" name="phone" #lastname="ngModel" [(ngModel)]="_caleventService.selectedAppointment.phone" pattern="\+\d\d{10}"/>
+            <input class="form-control" placeholder="+1 (xxx) xxx-xxxx" [textMask]="{mask: mask}" name="phone" #phone="ngModel" [(ngModel)]="_caleventService.selectedAppointment.phone" pattern="\+\d\d{10}"/>
         </div>
     </div>
         <!--
@@ -90,6 +90,13 @@
 
             </div>
         </div>
+    <div class="row container col-md-12">
+        <div class="form-group col-md-6">
+            <label>Duration</label>
+            <input class="form-control" name="duration"   placeholder="0:00 Hrs:Mins" [textMask]="{mask: mask1}" pattern="\d\:\d" style="width: 150px;">
+        </div>
+        
+    </div>
         <div class="row container col-md-12">
             <div class="form-group col-md-12">
                 <label>Notes</label>

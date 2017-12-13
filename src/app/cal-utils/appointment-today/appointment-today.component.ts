@@ -14,10 +14,18 @@ export class AppointmentTodayComponent implements OnInit {
     appointmentlist: eventsAPI[];
     todaysAppointment: eventsAPI[];
 
+    monthNames: any = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+        ];
+
     today: Date = new Date();
     dat1: Date = new Date();
     dat2: Date = new Date();
     dummy: String;
+
+
+    
+
+
     constructor(private _caleventService: CalEventsService) { }
 
     ngOnInit() {
@@ -34,12 +42,18 @@ export class AppointmentTodayComponent implements OnInit {
 
 
                 this.dummy = y["start"];
-
-                if (this.dummy.substring(8, 10) == this.today.getDate().toString()) {
+                /* for double digits date (10-31) */
+                if (this.dummy.substring(8, 10) == this.today.getDate().toString() && this.dummy.substring(4, 7) == this.monthNames[this.today.getMonth()] && this.dummy.substring(11, 15) == this.today.getFullYear().toString()) {
+                    this.todaysAppointment.push(y as eventsAPI);
+                }
+                /* for date with single digits (1-9) */
+                else if (this.dummy.substring(9, 10) == this.today.getDate().toString() && this.dummy.substring(4, 7) == this.monthNames[this.today.getMonth()] && this.dummy.substring(11, 15) == this.today.getFullYear().toString()) {
                     this.todaysAppointment.push(y as eventsAPI);
                 }
             });
+            
 
+            console.log(this.appointmentlist);
             console.log("belwo are upcoming appointments: ");
             console.log(this.todaysAppointment);
             
@@ -81,6 +95,8 @@ export class AppointmentTodayComponent implements OnInit {
 
     public sortByDate(): void {
         console.log(this.today.getDate());
+        console.log(this.today.getMonth());
+        console.log(this.today.getFullYear());
         this.todaysAppointment.sort((a: eventsAPI, b: eventsAPI) => {
 
             this.dat1 = new Date(a.start);

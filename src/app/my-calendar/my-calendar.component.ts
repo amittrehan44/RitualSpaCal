@@ -197,7 +197,7 @@ export class MyCalendarComponent implements OnInit {
     }
 
 
-
+    /* I dont think this function is used anywhere*/
     addEvent(date: Date): void {
         this.events.push({
             title: 'New event',
