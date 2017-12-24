@@ -11,7 +11,8 @@ import {
     endOfMonth,
     isSameDay,
     isSameMonth,
-    addHours
+    addHours,
+    differenceInMinutes
 } from 'date-fns';
 
 import { Subject } from 'rxjs/Subject';
@@ -29,6 +30,7 @@ import { CalEventsService } from './../cal-events.service'
 import { CustomEventTitleFormatter } from './../custom-event-title-formatter.service';
 import { AuthService } from './../core/auth.service';
 import { eventsAPI } from './../app.component';
+import { Services } from './../cal-utils/services.model';
 
 const colors: any = {
     red: {
@@ -95,11 +97,16 @@ export class MyCalendarComponent implements OnInit {
     refresh: Subject<any> = new Subject();
 
     /*   events: CalendarEvent[] = []; */
-    events: Array<CalendarEvent<{ $key: string; name: string, phone: string, service: string, gender: string, stylist_title: string, notes: string }>> = []
+    events: Array<CalendarEvent<{ $key: string; name: string, phone: string, service: string, gender: string, stylist_title: string, notes: string, serviceOptionIds: number[] }>> = []
 
     filteredEvents: eventsAPI[];
 
-
+    eventService: Services[];
+    evenServicesName: string[];
+    eventServiceJoin: string;
+    eventServiceJoin1: string[]=[];
+    serviceIds: number[] = [];
+    eventServiceIDs: Array<number[]> = [];
 
     /* Moving below arrya in cal-event service  */
 
@@ -138,6 +145,11 @@ export class MyCalendarComponent implements OnInit {
        ];
    */
     activeDayIsOpen: boolean = true;
+
+    durationMins: number;
+    durationHrs: string;
+    _tempMins: number;
+    _tempMinsStr: string;
 
     constructor(private modal: NgbModal, private _caleventService: CalEventsService, public auth: AuthService) { }
 
@@ -193,11 +205,28 @@ export class MyCalendarComponent implements OnInit {
             notes: event.meta.notes
         }
 
+        //Place code to fill duration
+        this.durationMins = differenceInMinutes(event.end, event.start);
+        this.durationHrs = Number(this.durationMins / 60).toFixed(2);
+        console.log(this.durationHrs);
+        console.log(Number(Number(this.durationHrs.substring(2, 4)) / 100) * 60);
+        this._tempMins = Math.round(Number(Number(this.durationHrs.substring(2, 4)) / 100) * 60);
 
+        if (this._tempMins > 9) {
+            this._tempMinsStr = this._tempMins.toString();
+        }
+        else {
+            this._tempMinsStr = "0" + this._tempMins;
+        }
+
+        console.log(this._tempMinsStr);
+        this._caleventService._durationString1 = this.durationHrs.substring(0, 1) + ":" + this._tempMinsStr;
+
+        this._caleventService.optionsMultiselect = event.meta.serviceOptionIds;
     }
 
 
-    /* I dont think this function is used anywhere*/
+    /* I dont think this function is used anywhere
     addEvent(date: Date): void {
         this.events.push({
             title: 'New event',
@@ -222,7 +251,7 @@ export class MyCalendarComponent implements OnInit {
         this.refresh.next();
     }
 
-
+*/
 
     /*Below function is created to add event with right click
     contextAdd(message: string): void {
@@ -249,43 +278,116 @@ export class MyCalendarComponent implements OnInit {
         
     }
     */
-    loadevents(): void {
-        this.events = [];
+
+    loadServices(): void {
+        this.eventServiceJoin1 = [];
+        this.eventServiceIDs = [];
+
         for (var i: number = 0; i < this.filteredEvents.length; i++) {
-            if (this.filteredEvents[i].stylist_title == "Gurpreet") {
-                this.eventColor = colors.red; 
-            }
-            else if (this.filteredEvents[i].stylist_title == "Meena") {
-                this.eventColor = colors.blue;
-            }
-            else {
-                this.eventColor = colors.yellow;
-            }
-            this.events.push({
-                title: this.filteredEvents[i].stylist_title,
-                start: new Date(this.filteredEvents[i].start),
-                end: new Date(this.filteredEvents[i].end),
-                color: this.eventColor,
-                draggable: true,
-                resizable: {
-                    beforeStart: true,
-                    afterEnd: true
-                },
-                meta: {
-
-                    $key: this.filteredEvents[i].$key,
-                    name: this.filteredEvents[i].name,
-                    phone: this.filteredEvents[i].phone,
-                    service: this.filteredEvents[i].service,
-                    gender: this.filteredEvents[i].gender,
-                    stylist_title: this.filteredEvents[i].stylist_title,
-                    notes: this.filteredEvents[i].notes
-
-                }
+        
+             //get all services in new array from firebase
+            var z = this._caleventService.getFirebaseServiceData(this.filteredEvents[i].$key);
+            z.snapshotChanges().subscribe(item => {
+                this.eventService = [];
+                this.evenServicesName = [];
+                this._caleventService.optionsMultiselect = [];
+                this.serviceIds = [];
+                //this.eventServiceJoin1 = [];
+                item.forEach(element => {
+                    var y = element.payload.toJSON();
+                    // y["$key"] = element.key;
+                    this.eventService.push(y as Services);
+                    this.evenServicesName.push(y["name"]);
+                    //this._caleventService.optionsMultiselect.push(y["id"]);
+                    this.serviceIds.push(y["id"]);
+                    //console.log(y["name"]);
+                });
+                console.log(this.evenServicesName.join());
+                this.eventServiceJoin = this.evenServicesName.join();
+                this.eventServiceJoin1.push(this.eventServiceJoin);
+                
+                this.eventServiceIDs.push(this.serviceIds);
+              
+                //this.eventServiceJoinIds.push(this.eventServiceJoin);
+                
+                //call load events here
+                return this.loadevents();
             });
-            this.refresh.next();
+            
+        }
+        
+    }
 
-        };
+    loadevents(): void {
+        const eventService: string[] = [];
+        this.events = [];
+        if (this.eventServiceJoin1.length == this.filteredEvents.length){     
+            for (var i: number = 0; i < this.eventServiceJoin1.length; i++) {
+
+                //Select Color as per stylist
+                if (this.filteredEvents[i].stylist_title == "Gurpreet") {
+                    this.eventColor = colors.red;
+                }
+                else if (this.filteredEvents[i].stylist_title == "Meena") {
+                    this.eventColor = colors.blue;
+                }
+                else {
+                    this.eventColor = colors.yellow;
+                }
+
+
+                //get all services in new array
+                /*           
+                           var z = this._caleventService.getFirebaseServiceData(this.filteredEvents[i].$key);
+                           z.snapshotChanges().subscribe(item => {
+                               this.eventService = [];
+                               this.evenServicesName = [];
+                               item.forEach(element => {
+                                   var y = element.payload.toJSON();
+                                   // y["$key"] = element.key;
+                                   this.eventService.push(y as Services);
+                                   this.evenServicesName.push(y["name"]);
+                                   console.log(y["name"]);
+                               });
+                               console.log(this.evenServicesName.join());
+                               this.eventServiceJoin = this.evenServicesName.join();
+                           });
+               
+                
+
+                console.log(i);
+                console.log(this.filteredEvents[i].name);
+                console.log(this.eventServiceJoin1[i]);
+ */
+                this.events.push({
+                    title: this.filteredEvents[i].stylist_title,
+                    start: new Date(this.filteredEvents[i].start),
+                    end: new Date(this.filteredEvents[i].end),
+                    color: this.eventColor,
+                    draggable: true,
+                    resizable: {
+                        beforeStart: false,
+                        afterEnd: false
+                    },
+                    meta: {
+
+                        $key: this.filteredEvents[i].$key,
+                        name: this.filteredEvents[i].name,
+                        phone: this.filteredEvents[i].phone,
+                        service: this.eventServiceJoin1[i],
+                        gender: this.filteredEvents[i].gender,
+                        stylist_title: this.filteredEvents[i].stylist_title,
+                        notes: this.filteredEvents[i].notes,
+                        serviceOptionIds: this.eventServiceIDs[i]
+
+                    }
+                });
+                this.refresh.next();
+
+
+
+            };
+        } 
     }
 
     ngOnInit(): void {
@@ -301,20 +403,11 @@ export class MyCalendarComponent implements OnInit {
             });
             console.log(this.filteredEvents);
             this.sortByDate();
-            this.loadevents();
+            this.loadServices();
+            //call load events in load services
+//            this.loadevents();
+            
         });
-
-        /* 
-       
-    
-        this._caleventService.getCalEvents()
-            .subscribe(filteredEvents => {
-                this.filteredEvents = filteredEvents
-                this.loadevents();
-            },
-            error => this.errorMessage = <any>error);
-
-          */
 
 
     }

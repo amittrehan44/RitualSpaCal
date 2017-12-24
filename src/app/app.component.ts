@@ -51,12 +51,16 @@ const colors: any = {
 };
 
  */
+
+import { Services } from './cal-utils/services.model';
+
 export class eventsAPI {
 
     $key: string;
     name: string;
     phone: string;
-    service: string;
+    //service: string;
+    service: any[];
     start: Date;
     end: Date;
     stylist_title: string;

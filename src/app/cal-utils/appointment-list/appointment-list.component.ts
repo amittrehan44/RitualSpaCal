@@ -3,6 +3,9 @@ import { CalEventsService } from './../../cal-events.service'
 import { eventsAPI } from './../../app.component';
 import { DatePipe } from '@angular/common';
 
+import { Services } from './../services.model';
+
+
 
 import {
     CalendarEventTitleFormatter
@@ -21,7 +24,10 @@ export class AppointmentListComponent implements OnInit {
 
     dat1: Date = new Date();
     dat2: Date = new Date();
- 
+
+    //variable for services
+    eventService: Array<Services[]>;
+    eventService1: Array<Services[]> =[];
     _listFilterName: string;
     get listFilterName(): string {
         return this._listFilterName;
@@ -98,9 +104,10 @@ export class AppointmentListComponent implements OnInit {
                 appointment.phone.toLocaleLowerCase().indexOf(filterBy) !== -1);
         }
         else if (coloumnFilter == "services") {
-           
+  /*         
             return this.filteredProducts.filter((appointment: eventsAPI) =>
                 appointment.service.toLocaleLowerCase().indexOf(filterBy) !== -1);
+  */      
         }
         else if (coloumnFilter == "gender") {
        
@@ -121,17 +128,35 @@ export class AppointmentListComponent implements OnInit {
         var x = this._caleventService.getFirebaseData();
         x.snapshotChanges().subscribe(item => {
             this.appointmentlist = [];
-            
+            this.eventService = [];
+
             item.forEach(element => {
                 var y = element.payload.toJSON();
                 y["$key"] = element.key;
-                this.appointmentlist.push(y as eventsAPI);            
+                this.appointmentlist.push(y as eventsAPI); 
+
+                //add services in array
+                this.eventService.push(y["service"]);           
             });
             this.filteredProducts = this.appointmentlist;
             this.sortByDate();
+            console.log(this.eventService);
+            this.eventService.forEach(service => {
+                this.eventService1.push(service);
+                console.log(this.eventService1);
+                this.eventService1.forEach(item => {
+
+                                   console.log(item[0]);
+                    item.forEach(item1 => {
+                        console.log(item1);
+                    });
+                });
+               
+            });
             
-           
         });
+
+        
         
     }
 

@@ -22,11 +22,14 @@ import {
     endOfMonth,
     isSameDay,
     isSameMonth,
-    addHours
+    addHours,
+    addMinutes
 } from 'date-fns';
 
 
 import { eventsAPI } from './app.component';
+
+import { Services } from './cal-utils/services.model';
 
 const colors: any = {
     red: {
@@ -55,29 +58,60 @@ export class CalEventsService {
     //e164: string;
     contextDate: Date;
 
+    /* logic for setting duration*/
+    duration: number = 0;
+
+    _durationString1: string;
+    _durationString: string;
+    get durationString(): string {        
+        return this._durationString;        
+    }
+    set durationString(value: string) {
+        this._durationString = value;
+        console.log("inside setter duration");
+        console.log(this._durationString);
+        this.duration = Number(this._durationString.substring(0, 1)) * 60 + Number(this._durationString.substring(2, 4));
+        console.log(this.duration);
+        //this.filteredProducts = this.listFilterName ? this.performFilter(this.listFilterName, "name") : this.appointmentlist;
+    }
+
+    //Variables for multiselect services
+    selectService: Services[];
+    serviceList: AngularFireList<any>;
+    optionsMultiselect: number[];
+
     constructor(private _http: HttpClient, private firebase: AngularFireDatabase) { }
 
     /* getting data from firebase*/
 
     getFirebaseData() {
-        this.appointmentList = this.firebase.list('appointments');       
+         this.appointmentList = this.firebase.list('appointments');       
         return this.appointmentList;
+    }
+
+
+    // getting service data from firebase
+    getFirebaseServiceData(key: string) {
+        this.serviceList = this.firebase.list('appointments/'+key+'/service');
+        return this.serviceList;
     }
 
      /* below function to insert data from firebase is not working  */
     insertAppointment(appointment: eventsAPI) {
         //this.e164 = "+1" + appointment.phone.substring(4, 7) + appointment.phone.substring(9, 12) + appointment.phone.substring(13, 17);
         //console.log(this.e164);
-        console.log(addHours(appointment.start, 2));
+        
         this.appointmentList.push({
             
             name: appointment.name,
             phone: appointment.phone,
-            service: appointment.service,
+            //service: appointment.service,
+            service: this.selectService,
             gender: appointment.gender,
             stylist_title: appointment.stylist_title,
             start: appointment.start.toString(),
-            end: appointment.end.toString(),
+            //end: appointment.end.toString(),
+            end: addMinutes(appointment.start, this.duration).toString(),
             notes: appointment.notes
            
         });
@@ -89,11 +123,13 @@ export class CalEventsService {
         this.appointmentList.update(appointment.$key, {
             name: appointment.name,
             phone: appointment.phone,
-            service: appointment.service,
+            //service: appointment.service,
+            service: this.selectService,
             gender: appointment.gender,
             stylist_title: appointment.stylist_title,
             start: appointment.start.toString(),
-            end: appointment.end.toString(),
+            //end: appointment.end.toString(),
+            end: addMinutes(appointment.start, this.duration).toString(),
             notes: appointment.notes
         })
     }

@@ -17,6 +17,8 @@ import { AppointmentTodayComponent } from './appointment-today/appointment-today
 import { AppRoutingModule } from './../app-routing.module';
 import { TextMaskModule } from 'angular2-text-mask';
 import { NavbarComponent } from './navbar/navbar.component';
+import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
+import { Services } from './services.model';
 
 
 @NgModule({
@@ -32,7 +34,8 @@ import { NavbarComponent } from './navbar/navbar.component';
            useBootstrap4: true,
       }),
       
-      TextMaskModule
+      TextMaskModule,
+      MultiselectDropdownModule
   ],
   declarations: [DateTimePickerComponent, CalendarHeaderComponent, CalContextmenuComponent, AppointmentInputComponent, AppointmentListComponent, AppointmentTodayComponent, NavbarComponent],
     exports: [CalendarHeaderComponent, DateTimePickerComponent, CalContextmenuComponent, ContextMenuModule, AppointmentInputComponent, AppointmentListComponent, AppointmentTodayComponent, NavbarComponent]

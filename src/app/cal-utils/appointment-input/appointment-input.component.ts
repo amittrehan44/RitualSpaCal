@@ -15,6 +15,13 @@ import {
     addHours
 } from 'date-fns';
 
+
+import { IMultiSelectOption } from 'angular-2-dropdown-multiselect';
+
+import { Services } from './../services.model';
+
+
+
 @Component({
   selector: 'app-appointment-input',
   templateUrl: './appointment-input.component.html',
@@ -30,8 +37,14 @@ export class AppointmentInputComponent implements OnInit {
 
     //mask: any[] = ['+', '1', ' ', '(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
     mask: any[] = ['+', '1', /[1-9]/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/];
-    mask1: any[] = [/[0-9]/, ':', /[0-6]/, /[0-9]/];
+    mask1: any[] = [/[0-9]/, ':', /[0-5]/, /[0-9]/];
     mask2: any[] = [/^[0-9]+(\.[0-9]{1,2})?$/];
+
+    //Variables for multiselect services
+    optionsModel: number[] = [];
+    myServiceOptions: IMultiSelectOption[];
+
+    selectedService: Services[];
 
     constructor(private _caleventService: CalEventsService, private modal: NgbModal) { }
 
@@ -43,10 +56,46 @@ export class AppointmentInputComponent implements OnInit {
         setTimeout(() => {
             this.setStartData();
         });
+
+
+        //for service multiselect
+        this.myServiceOptions = [
+            { id: 1, name: 'Waxing' },
+            { id: 2, name: 'Trimming' },
+            { id: 3, name: 'Haircut' },
+            { id: 4, name: 'Laser' },
+        ]; 
+/*
+        this.myServiceOptions= [
+            { id: 1, name: 'Car brands', isLabel: true },
+            { id: 2, name: 'Volvo', parentId: 1 },
+            { id: 3, name: 'Honda', parentId: 1 },
+            { id: 4, name: 'BMW', parentId: 1 },
+            { id: 5, name: 'Colors', isLabel: true },
+            { id: 6, name: 'Blue', parentId: 5 },
+            { id: 7, name: 'Red', parentId: 5 },
+            { id: 8, name: 'White', parentId: 5 }
+        ];   
+*/          
     }
 
+    //for service multiselect
+    onChange() {
+        console.log(this.optionsModel);
 
+        this.selectedService = [];
+        if (this.optionsModel != null) { 
+        for (var i: number = 0; i < this.optionsModel.length; i++) {
+            this.selectedService.push({
+                id: this.optionsModel[i],
+                name: this.myServiceOptions[this.optionsModel[i] - 1].name
 
+            });
+        }
+    }
+        console.log(this.selectedService);
+        this._caleventService.selectService = this.selectedService;
+    }
 
 
     resetForm(form?: NgForm) {
@@ -56,13 +105,16 @@ export class AppointmentInputComponent implements OnInit {
             $key: null,
             name: '',
             phone: '',
-            service: '',
+            //service: '',
+            service: [],
             start: new Date(),
             end: new Date(),
             stylist_title: '',
             gender: '',
             notes: ''
         }
+        this._caleventService.durationString = '0:15';
+        
     }
 
     onSubmit(form: NgForm) {
@@ -111,6 +163,9 @@ export class AppointmentInputComponent implements OnInit {
         }
         if (this._caleventService.appointmentToUpdate != null) {
             this._caleventService.selectedAppointment = this._caleventService.appointmentToUpdate;
+            this._caleventService.durationString = this._caleventService._durationString1;
+            this.optionsModel = this._caleventService.optionsMultiselect;
+            this._caleventService._durationString1 = null;
             this._caleventService.appointmentToUpdate = null;
         }
         

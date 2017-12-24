@@ -9,14 +9,11 @@
         <div class="form-group col-md-6">
             <label>Phone</label>
             <input class="form-control" placeholder="+1 (xxx) xxx-xxxx" [textMask]="{mask: mask}" name="phone" #phone="ngModel" [(ngModel)]="_caleventService.selectedAppointment.phone" pattern="\+\d\d{10}"/>
+            
         </div>
     </div>
-        <!--
-            <div class="form-group">
-                <label>Gender</label>
-                <input class="form-control" name="gender" #gender="ngModel" [(ngModel)]="_caleventService.selectedAppointment.gender" placeholder="Male Or Female">
-            </div>
-        -->
+
+  
         
 
     <div class="row container col-md-12">
@@ -46,26 +43,22 @@
 
      </div>
 
-    <!--Radio Button-->
+    <!--Service multiselectExperiment-->
+    <div class="row container col-md-12">
+        <div class="form-group col-md-6">
+            <ss-multiselect-dropdown [options]="myServiceOptions" [(ngModel)]="optionsModel" name="service1" (ngModelChange)="onChange($event)"></ss-multiselect-dropdown>
+        </div>
+    </div>
+
+    <!--Radio Button
     <div class="row container col-md-12">
         <div class="form-group col-md-12">
             <label>Gender:</label><br />
             <input type="radio" name="gender" value="M" [(ngModel)]="_caleventService.selectedAppointment.gender"> Male
             <input type="radio" name="gender" value="F" [(ngModel)]="_caleventService.selectedAppointment.gender"> Female
         </div>
- <!--       <div class="form-group col-md-6">
-            <label>Stylist:</label><br />
-            <input type="radio" name="stylist_title" value="Gurpreet" [(ngModel)]="_caleventService.selectedAppointment.stylist_title"> Gurpreet
-            <input type="radio" name="stylist_title" value="Meena" [(ngModel)]="_caleventService.selectedAppointment.stylist_title"> Meena
-            <input type="radio" name="stylist_title" value="Other" [(ngModel)]="_caleventService.selectedAppointment.stylist_title" [checked]="options"> Other
-            <div  class="form-group col-md-12"> 
-                
-                    <input class="form-control" list="stylist" name="stylist_title" #stylist_title="ngModel" [(ngModel)]="_caleventService.selectedAppointment.stylist_title" placeholder="Stylist">
-             
-            </div>
-        </div>
-        -->
     </div>
+-->
         <div class="row container col-md-12">
             <div class="form-group col-md-6">
                 <label>Starts at</label>
@@ -79,7 +72,7 @@
 
             </div>
             <div class="form-group col-md-6">
-                <label>Ends at</label>
+<!--                <label>Ends at</label>
                 <mwl-demo-utils-date-time-picker class="form-control"
                                                  name="end"
                                                  #end="ngModel"
@@ -87,16 +80,27 @@
                                                  (ngModelChange)="refresh.next()"
                                                  placeholder="Not set">
                 </mwl-demo-utils-date-time-picker>
-
+-->
+                <label>Duration (Hrs:Mins)</label>
+                <input class="form-control" name="duration" [(ngModel)]="_caleventService.durationString" placeholder="Hrs:Mins" [textMask]="{mask: mask1}" pattern="\d\:\d{2}" style="width: 150px;">  
+                <br />
+                <br />
+                <div class="form-group col-md-12">
+                    <label>Gender:</label><br />
+                    <input type="radio" name="gender" value="M" [(ngModel)]="_caleventService.selectedAppointment.gender"> Male
+                    <input type="radio" name="gender" value="F" [(ngModel)]="_caleventService.selectedAppointment.gender"> Female
+                </div>  
             </div>
         </div>
-    <div class="row container col-md-12">
+<!-- 
+       <div class="row container col-md-12">
         <div class="form-group col-md-6">
             <label>Duration</label>
-            <input class="form-control" name="duration"   placeholder="0:00 Hrs:Mins" [textMask]="{mask: mask1}" pattern="\d\:\d" style="width: 150px;">
+            <input class="form-control" name="duration"  [(ngModel)]="_caleventService.durationString"   placeholder="0:00 Hrs:Mins" [textMask]="{mask: mask1}"  pattern="\d\:\d{2}" style="width: 150px;">
         </div>
         
     </div>
+-->
         <div class="row container col-md-12">
             <div class="form-group col-md-12">
                 <label>Notes</label>

@@ -45,6 +45,8 @@ export class AppointmentTodayComponent implements OnInit {
                 /* for double digits date (10-31) */
                 if (this.dummy.substring(8, 10) == this.today.getDate().toString() && this.dummy.substring(4, 7) == this.monthNames[this.today.getMonth()] && this.dummy.substring(11, 15) == this.today.getFullYear().toString()) {
                     this.todaysAppointment.push(y as eventsAPI);
+
+
                 }
                 /* for date with single digits (1-9) */
                 else if (this.dummy.substring(9, 10) == this.today.getDate().toString() && this.dummy.substring(4, 7) == this.monthNames[this.today.getMonth()] && this.dummy.substring(11, 15) == this.today.getFullYear().toString()) {
