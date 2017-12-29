@@ -198,6 +198,7 @@
                                    [refresh]="refresh"
                                    (eventClicked)="handleEvent('Clicked', $event.event)"
                                    (eventTimesChanged)="eventTimesChanged($event)"
+                                   [hourSegments]="4"
                                    [hourSegmentTemplate]="dayHourSegmentTemplate">
             </mwl-calendar-day-view>
         </div>

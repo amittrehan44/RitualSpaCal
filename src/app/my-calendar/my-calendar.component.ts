@@ -103,7 +103,7 @@ export class MyCalendarComponent implements OnInit {
 
     eventService: Services[];
     evenServicesName: string[];
-    eventServiceJoin: string;
+ //   eventServiceJoin: string;
     eventServiceJoin1: string[]=[];
     serviceIds: number[] = [];
     eventServiceIDs: Array<number[]> = [];
@@ -280,13 +280,15 @@ export class MyCalendarComponent implements OnInit {
     */
 
     loadServices(): void {
-        this.eventServiceJoin1 = [];
-        this.eventServiceIDs = [];
+        //initialize to empty array in ngOnInit menthod
+        //this.eventServiceJoin1 = [];
+        //this.eventServiceIDs = [];
 
         for (var i: number = 0; i < this.filteredEvents.length; i++) {
         
              //get all services in new array from firebase
             var z = this._caleventService.getFirebaseServiceData(this.filteredEvents[i].$key);
+            var eventServiceJoin: string;
             z.snapshotChanges().subscribe(item => {
                 this.eventService = [];
                 this.evenServicesName = [];
@@ -303,8 +305,8 @@ export class MyCalendarComponent implements OnInit {
                     //console.log(y["name"]);
                 });
                 console.log(this.evenServicesName.join());
-                this.eventServiceJoin = this.evenServicesName.join();
-                this.eventServiceJoin1.push(this.eventServiceJoin);
+                eventServiceJoin = this.evenServicesName.join();
+                this.eventServiceJoin1.push(eventServiceJoin);
                 
                 this.eventServiceIDs.push(this.serviceIds);
               
@@ -364,7 +366,7 @@ export class MyCalendarComponent implements OnInit {
                     start: new Date(this.filteredEvents[i].start),
                     end: new Date(this.filteredEvents[i].end),
                     color: this.eventColor,
-                    draggable: true,
+                    draggable: false,
                     resizable: {
                         beforeStart: false,
                         afterEnd: false
@@ -395,6 +397,8 @@ export class MyCalendarComponent implements OnInit {
         var x = this._caleventService.getFirebaseData();
         x.snapshotChanges().subscribe(item => {
             this.filteredEvents = [];
+            this.eventServiceJoin1 = [];
+            this.eventServiceIDs = [];
             item.forEach(element => {
                 var y = element.payload.toJSON();
                 y["$key"] = element.key;

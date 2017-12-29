@@ -43,7 +43,6 @@ export class AppointmentInputComponent implements OnInit {
     //Variables for multiselect services
     optionsModel: number[] = [];
     myServiceOptions: IMultiSelectOption[];
-
     selectedService: Services[];
 
     constructor(private _caleventService: CalEventsService, private modal: NgbModal) { }
@@ -65,6 +64,8 @@ export class AppointmentInputComponent implements OnInit {
             { id: 3, name: 'Haircut' },
             { id: 4, name: 'Laser' },
         ]; 
+
+        this.setServices();
 /*
         this.myServiceOptions= [
             { id: 1, name: 'Car brands', isLabel: true },
@@ -81,7 +82,7 @@ export class AppointmentInputComponent implements OnInit {
 
     //for service multiselect
     onChange() {
-        console.log(this.optionsModel);
+        //console.log(this.optionsModel);
 
         this.selectedService = [];
         if (this.optionsModel != null) { 
@@ -167,7 +168,23 @@ export class AppointmentInputComponent implements OnInit {
             this.optionsModel = this._caleventService.optionsMultiselect;
             this._caleventService._durationString1 = null;
             this._caleventService.appointmentToUpdate = null;
+            this._caleventService.optionsMultiselect = null;
+        }    
+    }
+
+    setServices() {
+        this.optionsModel = this._caleventService.optionsMultiselect;
+        if (this.optionsModel != null) {
+            this.selectedService = [];
+            for (var i: number = 0; i < this.optionsModel.length; i++) {
+                this.selectedService.push({
+                    id: this.optionsModel[i],
+                    name: this.myServiceOptions[this.optionsModel[i] - 1].name
+
+                });
+
+                this._caleventService.selectService = this.selectedService;
+            }
         }
-        
     }
 }
