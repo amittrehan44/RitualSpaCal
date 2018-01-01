@@ -20,7 +20,7 @@
     <div class="row container col-md-12">
         <div class="form-group col-md-6">
             <label>Service</label><br />
-            <ss-multiselect-dropdown [options]="myServiceOptions" [(ngModel)]="optionsModel" name="service1" (ngModelChange)="onChange($event)"></ss-multiselect-dropdown>
+            <ss-multiselect-dropdown  [options]="myServiceOptions" [(ngModel)]="optionsModel" name="service1" (ngModelChange)="onChange($event)" required></ss-multiselect-dropdown>
             <!--
                            <label>Service</label>
                            <input class="form-control" list="services" name="service" #service="ngModel" [(ngModel)]="_caleventService.selectedAppointment.service" placeholder="Service">
@@ -74,8 +74,9 @@
                                                  (ngModelChange)="refresh.next()"
                                                  placeholder="Not set">
                 </mwl-demo-utils-date-time-picker>
-
+   <!--             <div><p>{{_caleventService.selectedAppointment.start}}</p></div> -->
             </div>
+           
             <div class="form-group col-md-6">
 <!--                <label>Ends at</label>
                 <mwl-demo-utils-date-time-picker class="form-control"

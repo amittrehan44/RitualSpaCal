@@ -21,7 +21,8 @@ import {
     CalendarEvent,
     CalendarEventAction,
     CalendarEventTimesChangedEvent,
-    CalendarEventTitleFormatter
+    CalendarEventTitleFormatter,
+    CalendarMonthViewDay 
 } from 'angular-calendar';
 
 import { AngularFireList } from 'angularfire2/database';
@@ -66,6 +67,7 @@ export class MyCalendarComponent implements OnInit {
     viewDate: Date = new Date();
 
     eventColor: any;
+    eventType: string;
 
     /* used to sort the dates in filteredevents array */
     dat1: Date = new Date();
@@ -97,7 +99,7 @@ export class MyCalendarComponent implements OnInit {
     refresh: Subject<any> = new Subject();
 
     /*   events: CalendarEvent[] = []; */
-    events: Array<CalendarEvent<{ $key: string; name: string, phone: string, service: string, gender: string, stylist_title: string, notes: string, serviceOptionIds: number[] }>> = []
+    events: Array<CalendarEvent<{ $key: string; name: string, phone: string, service: string, gender: string, stylist_title: string, notes: string, serviceOptionIds: number[], type: string }>> = []
 
     filteredEvents: eventsAPI[];
 
@@ -304,7 +306,7 @@ export class MyCalendarComponent implements OnInit {
                     this.serviceIds.push(y["id"]);
                     //console.log(y["name"]);
                 });
-                console.log(this.evenServicesName.join());
+//                console.log(this.evenServicesName.join());
                 eventServiceJoin = this.evenServicesName.join();
                 this.eventServiceJoin1.push(eventServiceJoin);
                 
@@ -329,12 +331,15 @@ export class MyCalendarComponent implements OnInit {
                 //Select Color as per stylist
                 if (this.filteredEvents[i].stylist_title == "Gurpreet") {
                     this.eventColor = colors.red;
+                    this.eventType = "danger";
                 }
                 else if (this.filteredEvents[i].stylist_title == "Meena") {
                     this.eventColor = colors.blue;
+                    this.eventType = "info";
                 }
                 else {
                     this.eventColor = colors.yellow;
+                    this.eventType = "warning";
                 }
 
 
@@ -366,10 +371,10 @@ export class MyCalendarComponent implements OnInit {
                     start: new Date(this.filteredEvents[i].start),
                     end: new Date(this.filteredEvents[i].end),
                     color: this.eventColor,
-                    draggable: false,
+                    draggable: true,
                     resizable: {
-                        beforeStart: false,
-                        afterEnd: false
+                        beforeStart: true,
+                        afterEnd: true
                     },
                     meta: {
 
@@ -380,7 +385,8 @@ export class MyCalendarComponent implements OnInit {
                         gender: this.filteredEvents[i].gender,
                         stylist_title: this.filteredEvents[i].stylist_title,
                         notes: this.filteredEvents[i].notes,
-                        serviceOptionIds: this.eventServiceIDs[i]
+                        serviceOptionIds: this.eventServiceIDs[i],
+                        type: this.eventType
 
                     }
                 });
@@ -435,6 +441,17 @@ export class MyCalendarComponent implements OnInit {
         console.log(message);
 
 
+    }
+
+    beforeMonthViewRender({ body }: { body: CalendarMonthViewDay[] }): void {
+        body.forEach(cell => {
+            const groups: any = {};
+            cell.events.forEach((event: CalendarEvent<{ type: string }>) => {
+                groups[event.meta.type] = groups[event.meta.type] || [];
+                groups[event.meta.type].push(event);
+            });
+            cell['eventGroups'] = Object.entries(groups);
+        });
     }
 
 }

@@ -19,6 +19,8 @@ import { TextMaskModule } from 'angular2-text-mask';
 import { NavbarComponent } from './navbar/navbar.component';
 import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
 import { Services } from './services.model';
+import { ChartsComponent } from './charts/charts.component';
+import { ChartsModule as Ng2Charts } from 'ng2-charts';
 
 
 @NgModule({
@@ -35,9 +37,10 @@ import { Services } from './services.model';
       }),
       
       TextMaskModule,
-      MultiselectDropdownModule
+      MultiselectDropdownModule,
+      Ng2Charts
   ],
-  declarations: [DateTimePickerComponent, CalendarHeaderComponent, CalContextmenuComponent, AppointmentInputComponent, AppointmentListComponent, AppointmentTodayComponent, NavbarComponent],
-    exports: [CalendarHeaderComponent, DateTimePickerComponent, CalContextmenuComponent, ContextMenuModule, AppointmentInputComponent, AppointmentListComponent, AppointmentTodayComponent, NavbarComponent]
+  declarations: [DateTimePickerComponent, CalendarHeaderComponent, CalContextmenuComponent, AppointmentInputComponent, AppointmentListComponent, AppointmentTodayComponent, NavbarComponent, ChartsComponent],
+    exports: [CalendarHeaderComponent, DateTimePickerComponent, CalContextmenuComponent, ContextMenuModule, AppointmentInputComponent, AppointmentListComponent, AppointmentTodayComponent, NavbarComponent ]
 })
 export class CalUtilsModule { }

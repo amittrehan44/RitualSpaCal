@@ -46,6 +46,7 @@
             <span class="cal-day-badge" *ngIf="day.badgeTotal > 0">{{ day.badgeTotal }}</span>
             <span class="cal-day-number">{{ day.date | calendarDate:'monthViewDayNumber':locale }}</span>
         </div>
+<!--
         <div class="cal-events">
             <div class="cal-event"
                  *ngFor="let event of day.events"
@@ -57,6 +58,13 @@
                  [tooltipPlacement]="tooltipPlacement"
                  (click)="$event.stopPropagation(); eventClicked.emit({event: event})">
             </div>
+        </div>
+-->
+        <div class="cell-totals">
+            <span *ngFor="let group of day.eventGroups"
+                  class="badge badge-{{ group[0] }}">
+                {{ group[1].length }}
+            </span>
         </div>
     </div>
 </ng-template>
@@ -182,7 +190,8 @@
                                      (dayClicked)="dayClicked($event.day)"
                                      (eventClicked)="handleEvent('Clicked', $event.event)"
                                      (eventTimesChanged)="eventTimesChanged($event)"
-                                     [cellTemplate]="monthCellTemplate">
+                                     [cellTemplate]="monthCellTemplate"
+                                     (beforeViewRender)="beforeMonthViewRender($event)">
             </mwl-calendar-month-view>
             <mwl-calendar-week-view *ngSwitchCase="'week'"
                                     [viewDate]="viewDate"

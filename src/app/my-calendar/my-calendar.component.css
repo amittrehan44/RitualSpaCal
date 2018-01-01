@@ -12,3 +12,11 @@ li { cursor: pointer; }
   justify-content: center;
   margin-bottom: 10px;
 }
+
+ .cell-totals {
+      margin: 5px;
+      text-align: center;
+    }
+    .badge {
+      margin-right: 5px;
+    }

@@ -62,6 +62,7 @@ export class DateTimePickerComponent implements ControlValueAccessor {
     @Input() placeholder: string;
 
     date: Date;
+ //   newDate: Date = null;
 
     dateStruct: NgbDateStruct;
 
@@ -86,6 +87,7 @@ export class DateTimePickerComponent implements ControlValueAccessor {
             hour: getHours(date)
         };
         this.cdr.detectChanges();
+        
     }
 
     registerOnChange(fn: any): void {
@@ -93,6 +95,19 @@ export class DateTimePickerComponent implements ControlValueAccessor {
     }
 
     registerOnTouched(fn: any): void { }
+/*
+    updateDate(): void {
+        this.newDate = setYear(
+            setMonth(
+                setDate(this.date, this.dateStruct.day),
+                this.dateStruct.month - 1
+            ),
+            this.dateStruct.year
+        );
+        this.onChangeCallback(this.newDate);
+        this.date = this.newDate;
+    }
+*/
 
     updateDate(): void {
         const newDate: Date = setYear(
@@ -103,6 +118,7 @@ export class DateTimePickerComponent implements ControlValueAccessor {
             this.dateStruct.year
         );
         this.onChangeCallback(newDate);
+        this.date = newDate;
     }
 
     updateTime(): void {
@@ -114,5 +130,20 @@ export class DateTimePickerComponent implements ControlValueAccessor {
             this.timeStruct.hour
         );
         this.onChangeCallback(newDate);
+        this.date = newDate;
     }
+/*
+    updateTime(): void {
+        this.newDate = setHours(
+            setMinutes(
+                setSeconds(this.date, this.timeStruct.second),
+                this.timeStruct.minute
+            ),
+            this.timeStruct.hour
+        );
+        this.onChangeCallback(this.newDate);
+        this.date = this.newDate;
+    }
+*/
+    
 }

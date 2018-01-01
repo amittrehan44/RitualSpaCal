@@ -79,14 +79,14 @@ exports.textStatus = functions.database
                            }
                            const textMessage = {
                                body: `Hello ${name}, you have an Appointment on ${start} - Saddhers`,
-                               to: +17787792744,
-                              // to: phoneNumber,  // Text to this number
+                               //to: +17787792744,
+                               to: phoneNumber,  // Text to this number
                                from: twilioNumber // From a valid Twilio number
                            }
                            console.log('Sending messge to' + name + 'on phone number' + phoneNumber + 'on ' + start )
-                           return client.messages.create(textMessage).then(message => console.log(message.sid, 'success'))
+                         /*   return client.messages.create(textMessage).then(message => console.log(message.sid, 'success'))
                                                                      .catch(err => console.log(err))
-                           
+                          */
                        })
                        
        });
@@ -138,24 +138,24 @@ exports.dailySMSReminder = functions.https.onRequest((req, res) => {
             const getStartDate = date.toDateString()
 
             const start = DisplayCurrentTime(childSnap.val().start)
-            const phoneNumber = childSnap.val().phone
+            const phoneNumber1 = childSnap.val().phone
 
             if (getStartDate == getDate) {
                 names.push(name)
-                if (!validE164(phoneNumber)) {
+                if (!validE164(phoneNumber1)) {
                     throw new Error('number must be E164 format!')
                 }
 
                 const textMessage = {
                     body: `Hello ${name}, you have an Appointment tomorrow on ${start} - Saddhers`,
-                    to: +17787792744,
-                    // to: phoneNumber,  // Text to this number
+                    //to: +17787792744,
+                    to: phoneNumber1,  // Text to this number
                     from: twilioNumber // From a valid Twilio number
                 }
-                console.log('Sending messge to' + name + 'on phone number' + phoneNumber + 'on ' + start)
-                client.messages.create(textMessage).then(message => console.log(message.sid, 'success'))
+                console.log('Sending messge to' + name + 'on phone number' + phoneNumber1 + 'on ' + start)
+               /*  client.messages.create(textMessage).then(message => console.log(message.sid, 'success'))
                                                           .catch(err => console.log(err))
-
+                */
             }
         })
     }).then(() => {
