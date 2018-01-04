@@ -20,7 +20,8 @@
     <div class="row container col-md-12">
         <div class="form-group col-md-6">
             <label>Service</label><br />
-            <ss-multiselect-dropdown  [options]="myServiceOptions" [(ngModel)]="optionsModel" name="service1" (ngModelChange)="onChange($event)" required></ss-multiselect-dropdown>
+           <ss-multiselect-dropdown  [options]="myServiceOptions" [(ngModel)]="optionsModel" name="service1" (ngModelChange)="onChange($event)" required></ss-multiselect-dropdown> 
+          <!--   <ss-multiselect-dropdown  [options]="myServiceOptions" [(ngModel)]="optionsModel" name="service1" (ngModelChange)="onChange()" required></ss-multiselect-dropdown> -->
             <!--
                            <label>Service</label>
                            <input class="form-control" list="services" name="service" #service="ngModel" [(ngModel)]="_caleventService.selectedAppointment.service" placeholder="Service">
@@ -107,6 +108,14 @@
         
     </div>
 -->
+    <div class="row container col-md-12">
+        <div class="form-group col-md-6">
+            <label>Email</label>
+            <input class="form-control" placeholder=""  name="email" #email="ngModel" [(ngModel)]="_caleventService.selectedAppointment.email" />
+
+        </div>
+    </div>
+        
         <div class="row container col-md-12">
             <div class="form-group col-md-12">
                 <label>Notes</label>
@@ -120,7 +129,7 @@
             <button type="button" class="btn btn-default" *ngIf="_caleventService.selectedAppointment.$key!=null" (click)="onDelete(appointmentForm)">
                 <i class="fa fa-trash"></i> Delete
             </button>
-            <button type="button" class="btn btn-default" (click)="resetForm(appointmentForm)">
+            <button type="button" class="btn btn-default" *ngIf="_caleventService.selectedAppointment.$key==null" (click)="resetForm(appointmentForm)">
                 <i class="fa fa-repeat"></i> Reset
             </button>
         </div>

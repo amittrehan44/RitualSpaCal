@@ -78,13 +78,14 @@ exports.textStatus = functions.database
                                throw new Error('number must be E164 format!')
                            }
                            const textMessage = {
-                               body: `Hello ${name}, you have an Appointment on ${start} - Saddhers`,
+                               //body: `Hello ${name}, you have an Appointment on ${start} - Saddhers`,
+                               body: `You have an Appointment on ${start} - Saddhers Hair & Beauty Salon. If you need to reschedule please call 604-746-4786`,
                                //to: +17787792744,
                                to: phoneNumber,  // Text to this number
                                from: twilioNumber // From a valid Twilio number
                            }
                            console.log('Sending messge to' + name + 'on phone number' + phoneNumber + 'on ' + start )
-                         /*   return client.messages.create(textMessage).then(message => console.log(message.sid, 'success'))
+                           /*  return client.messages.create(textMessage).then(message => console.log(message.sid, 'success'))
                                                                      .catch(err => console.log(err))
                           */
                        })

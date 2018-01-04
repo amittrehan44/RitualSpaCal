@@ -99,7 +99,7 @@ export class MyCalendarComponent implements OnInit {
     refresh: Subject<any> = new Subject();
 
     /*   events: CalendarEvent[] = []; */
-    events: Array<CalendarEvent<{ $key: string; name: string, phone: string, service: string, gender: string, stylist_title: string, notes: string, serviceOptionIds: number[], type: string }>> = []
+    events: Array<CalendarEvent<{ $key: string; name: string, phone: string, service: string, gender: string, stylist_title: string, notes: string, email: string, serviceOptionIds: number[], type: string }>> = []
 
     filteredEvents: eventsAPI[];
 
@@ -153,7 +153,7 @@ export class MyCalendarComponent implements OnInit {
     _tempMins: number;
     _tempMinsStr: string;
 
-    constructor(private modal: NgbModal, private _caleventService: CalEventsService, public auth: AuthService) { }
+    constructor(public modal: NgbModal, public _caleventService: CalEventsService, public auth: AuthService) { }
 
     dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
         if (isSameMonth(date, this.viewDate)) {
@@ -204,7 +204,8 @@ export class MyCalendarComponent implements OnInit {
             end: event.end,
             stylist_title: event.meta.stylist_title,
             gender: event.meta.gender,
-            notes: event.meta.notes
+            notes: event.meta.notes,
+            email: event.meta.email
         }
 
         //Place code to fill duration
@@ -371,10 +372,10 @@ export class MyCalendarComponent implements OnInit {
                     start: new Date(this.filteredEvents[i].start),
                     end: new Date(this.filteredEvents[i].end),
                     color: this.eventColor,
-                    draggable: true,
+                    draggable: false,
                     resizable: {
-                        beforeStart: true,
-                        afterEnd: true
+                        beforeStart: false,
+                        afterEnd: false
                     },
                     meta: {
 
@@ -386,7 +387,8 @@ export class MyCalendarComponent implements OnInit {
                         stylist_title: this.filteredEvents[i].stylist_title,
                         notes: this.filteredEvents[i].notes,
                         serviceOptionIds: this.eventServiceIDs[i],
-                        type: this.eventType
+                        type: this.eventType,
+                        email: this.filteredEvents[i].email
 
                     }
                 });

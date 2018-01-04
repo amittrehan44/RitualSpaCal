@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "my-cal-app-9a044"
+    "default": "my-cal-app-9a044",
+    "production": "saddhersprod"
   }
 }

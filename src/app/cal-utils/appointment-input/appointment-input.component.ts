@@ -45,7 +45,7 @@ export class AppointmentInputComponent implements OnInit {
     myServiceOptions: IMultiSelectOption[];
     selectedService: Services[];
 
-    constructor(private _caleventService: CalEventsService, private modal: NgbModal) { }
+    constructor(public _caleventService: CalEventsService, public modal: NgbModal) { }
 
     ngOnInit() {
         
@@ -63,6 +63,7 @@ export class AppointmentInputComponent implements OnInit {
             { id: 2, name: 'Trimming' },
             { id: 3, name: 'Haircut' },
             { id: 4, name: 'Laser' },
+            { id: 5, name: 'Other' },
         ]; 
 
         this.setServices();
@@ -81,8 +82,8 @@ export class AppointmentInputComponent implements OnInit {
     }
 
     //for service multiselect
-    onChange() {
-        //console.log(this.optionsModel);
+    onChange(a: any) {
+        
 
         this.selectedService = [];
         if (this.optionsModel != null) { 
@@ -112,7 +113,8 @@ export class AppointmentInputComponent implements OnInit {
             end: new Date(),
             stylist_title: '',
             gender: '',
-            notes: ''
+            notes: '',
+            email: ''
         }
         this._caleventService.durationString = '0:15';
         
