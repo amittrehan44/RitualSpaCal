@@ -14,6 +14,8 @@ import { FormsModule } from '@angular/forms';
 import { MyCalendarComponent } from './my-calendar.component';
 import { CalUtilsModule } from './../cal-utils/cal-utils.module';
 import { AppComponent } from './../app.component';
+import { ResourcesComponent } from '../cal-utils/resources/resources.component';
+
 
 import { AppRoutingModule } from './../app-routing.module';
 
@@ -36,7 +38,7 @@ import { CustomEventTitleFormatter } from './../custom-event-title-formatter.ser
       AppRoutingModule
   ],
     declarations: [MyCalendarComponent],
-    exports: [MyCalendarComponent
+    exports: [MyCalendarComponent, ResourcesComponent
 
     ],
     providers: [CalEventsService,

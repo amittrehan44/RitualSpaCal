@@ -1,7 +1,6 @@
-import {
-    Component, OnInit, ChangeDetectionStrategy,
-    ViewChild,
-    TemplateRef } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, ChangeDetectionStrategy  } from '@angular/core';
+import { CalendarEvent } from 'angular-calendar';
+import { Subject } from 'rxjs/Subject';
 
 import {
     startOfDay,
@@ -15,23 +14,12 @@ import {
     differenceInMinutes
 } from 'date-fns';
 
-import { Subject } from 'rxjs/Subject';
+import { eventsAPI } from '../../app.component';
+import { Services } from '../../cal-utils/services.model';
+import { CalEventsService } from '../../cal-events.service'
+import { AuthService } from '../../core/auth.service';
+
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import {
-    CalendarEvent,
-    CalendarEventAction,
-    CalendarEventTimesChangedEvent,
-    CalendarEventTitleFormatter,
-    CalendarMonthViewDay 
-} from 'angular-calendar';
-
-import { AngularFireList } from 'angularfire2/database';
-
-import { CalEventsService } from './../cal-events.service'
-import { CustomEventTitleFormatter } from './../custom-event-title-formatter.service';
-import { AuthService } from './../core/auth.service';
-import { eventsAPI } from './../app.component';
-import { Services } from './../cal-utils/services.model';
 
 const colors: any = {
     red: {
@@ -49,136 +37,156 @@ const colors: any = {
 };
 
 
-
-
 @Component({
-  selector: 'app-my-calendar',
-    templateUrl: './my-calendar.component.html',
-    styleUrls: ['./my-calendar.component.css']
+    selector: 'app-resources',
+    templateUrl: './resources.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    styleUrls: ['./resources.component.css']
 })
-export class MyCalendarComponent implements OnInit {
+export class ResourcesComponent implements OnInit {
 
     @ViewChild('modalContent') modalContent: TemplateRef<any>;
     modalRef: NgbModalRef;
-    createModalRef: NgbModalRef;
 
-    view: string = 'month';
+    constructor(public _caleventService: CalEventsService, public auth: AuthService, public modal: NgbModal) { }
+
+    ngOnInit() {
+
+        var x = this._caleventService.getFirebaseData();
+        x.snapshotChanges().subscribe(item => {
+            this.filteredEvents = [];
+            this.eventServiceJoin1 = [];
+            this.eventServiceIDs = [];
+            item.forEach(element => {
+                var y = element.payload.toJSON();
+                y["$key"] = element.key;
+                this.filteredEvents.push(y as eventsAPI);
+
+            });
+            console.log(this.filteredEvents);
+            this.sortByDate();
+            this.loadServices();
+            //call load events in load services
+            //            this.loadevents();
+
+        });
+    }
+
+    public sortByDate(): void {
+        this.filteredEvents.sort((a: eventsAPI, b: eventsAPI) => {
+
+            this.dat1 = new Date(a.start);
+            this.dat2 = new Date(b.start);
+            return this.dat1.getTime() - this.dat2.getTime();
+
+
+        });
+    }
+
+    view: string = 'day';
 
     viewDate: Date = new Date();
 
     eventColor: any;
     eventType: string;
-
     /* used to sort the dates in filteredevents array */
     dat1: Date = new Date();
     dat2: Date = new Date();
 
-    errorMessage: string;
     modalData: {
         action: string;
         event: CalendarEvent;
     };
 
-    actions: CalendarEventAction[] = [
-        {
-            label: '<i class="fa fa-fw fa-pencil"></i>',
-            onClick: ({ event }: { event: CalendarEvent }): void => {
-                this.handleEvent('Edited', event);
-            }
-        },
-        {
-            label: '<i class="fa fa-fw fa-times"></i>',
-            onClick: ({ event }: { event: CalendarEvent }): void => {
-                this.events = this.events.filter(iEvent => iEvent !== event);
-                this.handleEvent('Deleted', event);
-            }
-        }
-    ];
-
-    appointmentList: AngularFireList<eventsAPI>;
     refresh: Subject<any> = new Subject();
+
+
+
+    createModalRef: NgbModalRef;
+    //events: CalendarEvent[] = [
+    //    {
+    //        start: new Date('2018-02-23'),
+    //        title: 'One day excluded event',
+    //        color: colors.red
+    //    },
+    //    {
+    //        start: new Date(),
+    //        title: 'aaj da event',
+    //        color: colors.red
+    //    },
+    //    {
+    //        start: new Date('2018-02-24'),
+    //        title: 'Multiple weeks',
+    //        color: colors.blue
+    //    },
+    //    {
+    //        start: new Date('2018-02-25'),
+    //        title: 'Multiple weeks event',
+    //        color: colors.blue
+    //    }
+    //];
+
+    //events1: CalendarEvent[] = [
+    //    {
+    //        start: subDays(startOfDay(new Date()), 1),
+    //        end: addDays(new Date(), 1),
+    //        title: 'A 3 day event',
+    //        color: colors.red
+
+    //    },
+    //    {
+    //        start: startOfDay(new Date()),
+    //        title: 'An event with no end date',
+    //        color: colors.yellow
+
+    //    },
+    //    {
+    //        start: subDays(endOfMonth(new Date()), 3),
+    //        end: addDays(endOfMonth(new Date()), 3),
+    //        title: 'A long event that spans 2 months',
+    //        color: colors.blue
+    //    },
+    //    {
+    //        start: addHours(startOfDay(new Date()), 2),
+    //        end: new Date(),
+    //        title: 'A draggable and resizable event',
+    //        color: colors.yellow,
+    //        resizable: {
+    //            beforeStart: true,
+    //            afterEnd: true
+    //        },
+    //        draggable: true
+    //    }
+    //];
+
 
     /*   events: CalendarEvent[] = []; */
     events: Array<CalendarEvent<{ $key: string; name: string, phone: string, service: string, gender: string, stylist_title: string, notes: string, email: string, serviceOptionIds: number[], type: string }>> = []
+
+    eventsResource1: Array<CalendarEvent<{ $key: string; name: string, phone: string, service: string, gender: string, stylist_title: string, notes: string, email: string, serviceOptionIds: number[], type: string }>> = []
+
 
     filteredEvents: eventsAPI[];
 
     eventService: Services[];
     evenServicesName: string[];
- //   eventServiceJoin: string;
-    eventServiceJoin1: string[]=[];
+    //   eventServiceJoin: string;
+    eventServiceJoin1: string[] = [];
     serviceIds: number[] = [];
     eventServiceIDs: Array<number[]> = [];
 
-    /* Moving below arrya in cal-event service  */
 
-    /*   events: CalendarEvent[] = [
-           {
-               start: subDays(startOfDay(new Date()), 1),
-               end: addDays(new Date(), 1),
-               title: 'A 3 day event',
-               color: colors.red,
-               actions: this.actions
-           },
-           {
-               start: startOfDay(new Date()),
-               title: 'An event with no end date',
-               color: colors.yellow,
-               actions: this.actions
-           },
-           {
-               start: subDays(endOfMonth(new Date()), 3),
-               end: addDays(endOfMonth(new Date()), 3),
-               title: 'A long event that spans 2 months',
-               color: colors.blue
-           },
-           {
-               start: addHours(startOfDay(new Date()), 2),
-               end: new Date(),
-               title: 'A draggable and resizable event',
-               color: colors.yellow,
-               actions: this.actions,
-               resizable: {
-                   beforeStart: true,
-                   afterEnd: true
-               },
-               draggable: true
-           }
-       ];
-   */
     activeDayIsOpen: boolean = true;
-
     durationMins: number;
     durationHrs: string;
     _tempMins: number;
     _tempMinsStr: string;
 
-    constructor(public modal: NgbModal, public _caleventService: CalEventsService, public auth: AuthService) { }
 
-    dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
-        if (isSameMonth(date, this.viewDate)) {
-            if (
-                (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
-                events.length === 0
-            ) {
-                this.activeDayIsOpen = false;
-            } else {
-                this.activeDayIsOpen = true;
-                this.viewDate = date;
-            }
-        }
-    }
 
-    eventTimesChanged({
-        event,
-        newStart,
-        newEnd
-    }: CalendarEventTimesChangedEvent): void {
-        event.start = newStart;
-        event.end = newEnd;
-        this.handleEvent('Dropped or resized', event);
-        this.refresh.next();
-    }
+    
+
+    //this function is used to diplay Modal when event is clicked
 
     handleEvent(action: string, event: CalendarEvent): void {
         this.modalData = { event, action };
@@ -228,59 +236,12 @@ export class MyCalendarComponent implements OnInit {
         this._caleventService.optionsMultiselect = event.meta.serviceOptionIds;
     }
 
+  
 
-    /* I dont think this function is used anywhere
-    addEvent(date: Date): void {
-        this.events.push({
-            title: 'New event',
-            start: date,
-            end: date,
-            color: colors.red,
-            draggable: true,
-            resizable: {
-                beforeStart: true,
-                afterEnd: true
-            },
-            meta: {
-                $key: '',
-                name: 'Firstname',
-                phone: 'phone',
-                service: 'service',
-                gender: 'M',
-                stylist_title: '',
-                notes: ''
-            }
-        });
-        this.refresh.next();
-    }
 
-*/
 
-    /*Below function is created to add event with right click
-    contextAdd(message: string): void {
-        this.events.push({
-            title: 'New event',
-            start: startOfDay(new Date()),
-            end: endOfDay(new Date()),
-            color: colors.red,
-            draggable: true,
-            resizable: {
-                beforeStart: true,
-                afterEnd: true
-            },
-            meta: {
 
-                firstname: 'Firstname',
-                lastname: 'lastname',
-                service: 'service',
-                gender: 'M'
 
-            }
-        });
-        this.refresh.next();
-        
-    }
-    */
 
     loadServices(): void {
         //initialize to empty array in ngOnInit menthod
@@ -288,8 +249,8 @@ export class MyCalendarComponent implements OnInit {
         //this.eventServiceIDs = [];
 
         for (var i: number = 0; i < this.filteredEvents.length; i++) {
-        
-             //get all services in new array from firebase
+
+            //get all services in new array from firebase
             var z = this._caleventService.getFirebaseServiceData(this.filteredEvents[i].$key);
             var eventServiceJoin: string;
             z.snapshotChanges().subscribe(item => {
@@ -307,32 +268,35 @@ export class MyCalendarComponent implements OnInit {
                     this.serviceIds.push(y["id"]);
                     //console.log(y["name"]);
                 });
-//                console.log(this.evenServicesName.join());
+                //                console.log(this.evenServicesName.join());
                 eventServiceJoin = this.evenServicesName.join();
                 this.eventServiceJoin1.push(eventServiceJoin);
-                
+
                 this.eventServiceIDs.push(this.serviceIds);
-              
+
                 //this.eventServiceJoinIds.push(this.eventServiceJoin);
-                
+
                 //call load events here
                 return this.loadevents();
             });
-            
+
         }
-        
+
     }
+
+
 
     loadevents(): void {
         const eventService: string[] = [];
         this.events = [];
-        if (this.eventServiceJoin1.length == this.filteredEvents.length){     
+        if (this.eventServiceJoin1.length == this.filteredEvents.length) {
             for (var i: number = 0; i < this.eventServiceJoin1.length; i++) {
 
-                //Select Color as per stylist
+                //Select Color as per stylist & Load the Resources
                 if (this.filteredEvents[i].stylist_title == "Gurpreet") {
                     this.eventColor = colors.red;
                     this.eventType = "danger";
+                    this.eventsResource1.push(this.events[i]);
                 }
                 else if (this.filteredEvents[i].stylist_title == "Meena") {
                     this.eventColor = colors.blue;
@@ -373,6 +337,7 @@ export class MyCalendarComponent implements OnInit {
                     end: new Date(this.filteredEvents[i].end),
                     color: this.eventColor,
                     draggable: false,
+                    allDay: false,
                     resizable: {
                         beforeStart: false,
                         afterEnd: false
@@ -397,65 +362,26 @@ export class MyCalendarComponent implements OnInit {
 
 
             };
-        } 
+        }
+        this.loadResources();
     }
 
-    ngOnInit(): void {
 
-        var x = this._caleventService.getFirebaseData();
-        x.snapshotChanges().subscribe(item => {
-            this.filteredEvents = [];
-            this.eventServiceJoin1 = [];
-            this.eventServiceIDs = [];
-            item.forEach(element => {
-                var y = element.payload.toJSON();
-                y["$key"] = element.key;
-                this.filteredEvents.push(y as eventsAPI);
-
-            });
-            console.log(this.filteredEvents);
-            this.sortByDate();
-            this.loadServices();
-            //call load events in load services
-//            this.loadevents();
-            
-        });
-
-
-    }
-
-    public sortByDate(): void {
-        this.filteredEvents.sort((a: eventsAPI, b: eventsAPI) => {
-
-            this.dat1 = new Date(a.start);
-            this.dat2 = new Date(b.start);
-            return this.dat1.getTime() - this.dat2.getTime();
-
-
-        });
+    //Thi function will load the data to eventsResource1
+    loadResources(): void {
+        this.eventsResource1 = [];
+        for (var i: number = 0; i < this.events.length; i++)
+        {
+            if (this.events[i].meta.stylist_title == "Meena")
+            {
+                this.eventsResource1.push(this.events[i]);
+            }
+        }
     }
 
     open(modalAppointmentForm) {
         this.createModalRef = this.modal.open(modalAppointmentForm, { size: 'lg' });
 
-    }
-    onCloseModal(message: string) {
-        console.log(message);
-
-
-    }
-
-
-    //Group events in Month view 
-    beforeMonthViewRender({ body }: { body: CalendarMonthViewDay[] }): void {
-        body.forEach(cell => {
-            const groups: any = {};
-            cell.events.forEach((event: CalendarEvent<{ type: string }>) => {
-                groups[event.meta.type] = groups[event.meta.type] || [];
-                groups[event.meta.type].push(event);
-            });
-            cell['eventGroups'] = Object.entries(groups);
-        });
     }
 
 }

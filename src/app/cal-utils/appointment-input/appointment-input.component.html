@@ -1,6 +1,32 @@
 <form #appointmentForm="ngForm" (ngSubmit)="onSubmit(appointmentForm)">
     <input type="hidden" name="$key" #$key="ngModel" [(ngModel)]="_caleventService.selectedAppointment.$key">
     
+    <div class="form-group col-md-12">
+        <label>Chair/Room:</label><br />
+
+        <!--<select name="email" #email="ngModel" [(ngModel)]="_caleventService.selectedAppointment.email">
+            <option value="">
+            <option value="TX R1">TX R1
+            <option value="TX R2">TX R2
+            <option value="Mani 2">Mani 2
+        </select><br />-->
+
+
+        <input type="radio" name="email" #email="ngModel" value="TX R1" [(ngModel)]="_caleventService.selectedAppointment.email"> TX R1
+        <input type="radio" name="email" #email="ngModel" value="TX R2" [(ngModel)]="_caleventService.selectedAppointment.email"> TX R2
+        <input type="radio" name="email" #email="ngModel" value="Pedi 1" [(ngModel)]="_caleventService.selectedAppointment.email"> Pedi 1
+        <input type="radio" name="email" #email="ngModel" value="Pedi 2" [(ngModel)]="_caleventService.selectedAppointment.email"> Pedi 2
+        <input type="radio" name="email" #email="ngModel" value="Pedi 3" [(ngModel)]="_caleventService.selectedAppointment.email"> Pedi 3
+        <br />
+        <input type="radio" name="email" #email="ngModel" value="Mani 1" [(ngModel)]="_caleventService.selectedAppointment.email"> Mani 1
+        <input type="radio" name="email" #email="ngModel" value="Mani 2" [(ngModel)]="_caleventService.selectedAppointment.email"> Mani 2
+        <input type="radio" name="email" #email="ngModel" value="Threading" [(ngModel)]="_caleventService.selectedAppointment.email"> Threading
+        
+        
+
+
+    </div>
+    
     <div class="row container col-md-12">
         <div class="form-group col-md-6">
             <label>Full Name</label>

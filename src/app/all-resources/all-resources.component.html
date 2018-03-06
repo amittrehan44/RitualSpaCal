@@ -1,0 +1,43 @@
+<app-navbar></app-navbar>
+
+<p>
+  all-resources works!
+</p>
+
+
+
+<div class="row text-center" style="margin-bottom: 10px;">
+    <div class="col-md-12">
+        <div class="btn-group">
+            <div class="btn btn-primary"
+                 mwlCalendarPreviousView
+                 [view]="view"
+                 [(viewDate)]="viewDate"
+                 (viewDateChange)="activeDayIsOpen = false">
+                Previous
+            </div>
+            <div class="btn btn-outline-secondary"
+                 mwlCalendarToday
+                 [(viewDate)]="viewDate">
+                Today
+            </div>
+            <div class="btn btn-primary"
+                 mwlCalendarNextView
+                 [view]="view"
+                 [(viewDate)]="viewDate"
+                 (viewDateChange)="activeDayIsOpen = false">
+                Next
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <h3 >{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
+    </div>
+
+</div>
+
+<my-calendar-day-view [viewDate]="viewDate"
+                      [events]="events"
+                      [refresh]="refresh"
+                      (userChanged)="userChanged($event)">
+</my-calendar-day-view>

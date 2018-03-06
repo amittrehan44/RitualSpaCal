@@ -57,6 +57,7 @@ export class CalEventsService {
     appointmentToUpdate: eventsAPI;
     //e164: string;
     contextDate: Date;
+    contextResource: string;
 
     /* logic for setting duration*/
     duration: number = 0;

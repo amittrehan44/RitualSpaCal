@@ -6,11 +6,11 @@
 export const environment = {
     production: false,
     firebase: {
-        apiKey: "AIzaSyDjxLceJfoSpicokIxpRoinJcX-Ypt_-UQ",
-        authDomain: "my-cal-app-9a044.firebaseapp.com",
-        databaseURL: "https://my-cal-app-9a044.firebaseio.com",
-        projectId: "my-cal-app-9a044",
-        storageBucket: "my-cal-app-9a044.appspot.com",
-        messagingSenderId: "324898046885"
+        apiKey: "AIzaSyC1G21T3g-hOO4oc-yeoZUjh8VgmXUzYN8",
+        authDomain: "ritualspadev.firebaseapp.com",
+        databaseURL: "https://ritualspadev.firebaseio.com",
+        projectId: "ritualspadev",
+        storageBucket: "ritualspadev.appspot.com",
+        messagingSenderId: "1055911073424"
     }
 };

@@ -1,0 +1,221 @@
+<app-navbar></app-navbar>
+<p>
+    resources works!
+</p>
+
+
+<!--Create Appointment Modal Starts-->
+
+<div class="col-sm-12 space"></div>
+
+<ng-template #modalAppointmentForm let-close="close">
+    <div class="modal-header">
+        <h5 class="modal-title">Create Appointment</h5>
+        <button type="button" class="close" (click)="close()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <app-appointment-input [createModalRef]="createModalRef" ></app-appointment-input>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" (click)="close()">Close</button>
+    </div>
+</ng-template>
+
+<!--/Create Appointment Modal Ends-->
+
+
+
+<!--Update Appointment Modal Starts-->
+<ng-template #modalContent let-close="close">
+    <div class="modal-header">
+        <h5 class="modal-title">Update Appointment</h5>
+        <button type="button" class="close" (click)="close()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <!-- <div>
+                    Action:
+                    <pre>{{ modalData?.action }}</pre>
+                </div>
+                <div>
+                    Event:
+                    <pre>{{ modalData?.event | json }}</pre>
+                </div>
+        -->
+        <app-appointment-input [modalRef]="modalRef" (closeModal)="onCloseModal($event)"></app-appointment-input>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" (click)="close()">Close</button>
+    </div>
+</ng-template>
+
+<!--/Update Appointment Modal Ends-->
+
+
+<!--Context Menu Starts-->
+<context-menu #basicMenu>
+    <!--    <ng-template contextMenuItem (execute)="addEvent($event.item)"> -->
+    <ng-template contextMenuItem (execute)="open(modalAppointmentForm); _caleventService.contextDate = $event.item; _caleventService.contextResource = 'Mani 2' ">
+        Add Appointment
+    </ng-template>
+</context-menu>
+<!--Context Menue Ends-->
+
+
+
+<!--Include context menuw to Calander Day View template-->
+<ng-template #dayHourSegmentTemplate let-segment="segment" let-locale="locale">
+    <div class="cal-hour-segment"
+         [ngClass]="segment.cssClass"
+         [contextMenu]="basicMenu"
+         [contextMenuSubject]="segment.date">
+        <div [hidden]="!segment.isStart" class="cal-time">
+            {{ segment.date | calendarDate:'dayViewHour':locale }}
+        </div>
+    </div>
+</ng-template>
+
+
+
+<div class="row text-center" style="margin-bottom: 10px;">
+    <div class="col-md-12">
+        <div class="btn-group">
+            <div class="btn btn-primary"
+                 mwlCalendarPreviousView
+                 [view]="view"
+                 [(viewDate)]="viewDate"
+                 (viewDateChange)="activeDayIsOpen = false">
+                Previous
+            </div>
+            <div class="btn btn-outline-secondary"
+                 mwlCalendarToday
+                 [(viewDate)]="viewDate">
+                Today
+            </div>
+            <div class="btn btn-primary"
+                 mwlCalendarNextView
+                 [view]="view"
+                 [(viewDate)]="viewDate"
+                 (viewDateChange)="activeDayIsOpen = false">
+                Next
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
+    </div>
+    
+</div>
+
+
+
+
+
+<div class="row">
+    <div class="col-md-2" style="margin: 0px; ">
+        <div class="ResourceHead" style="margin: 0px;">
+           <div><b>TX Room1</b></div> 
+            <button class="btn btn-primary" (click)="open(modalAppointmentForm); _caleventService.contextResource = 'Mani 2'">Add</button>
+        </div>
+        
+        <mwl-calendar-day-view [viewDate]="viewDate"
+                               [events]="eventsResource1"
+                               [refresh]="refresh"
+                               (eventClicked)="handleEvent('Clicked',  $event.event)"
+                               [hourSegments]="4"
+                               [dayStartHour]="10"
+                               [dayEndHour]="21"
+                               [hourSegmentTemplate]="dayHourSegmentTemplate">
+        </mwl-calendar-day-view> 
+        
+    </div>
+    <div class="col-md-2">
+        <div class="ResourceHead" style="margin: 0px;">TX Room2</div>
+ <mwl-calendar-day-view [viewDate]="viewDate"
+                               [events]="events"
+                               [refresh]="refresh"
+                               (eventClicked)="handleEvent('Clicked', $event.event)"
+                               [hourSegments]="4"
+                               [dayStartHour]="10"
+                               [dayEndHour]="21"
+                               [hourSegmentTemplate]="dayHourSegmentTemplate">
+        </mwl-calendar-day-view>
+        
+    </div>
+    <div class="col-md-2" style="margin: 0px;">
+        <div class="ResourceHead" style="margin: 0px;">Pedicure1</div>
+        <mwl-calendar-day-view [viewDate]="viewDate"
+                               [events]="eventsResource1"
+                               [refresh]="refresh"
+                               [hourSegments]="4"
+                               [dayStartHour]="10"
+                               [dayEndHour]="21"
+                                [hourSegmentTemplate]="dayHourSegmentTemplate">
+        </mwl-calendar-day-view>
+
+    </div>
+    <div class="col-md-2">
+        <div class="ResourceHead" style="margin: 0px;">Pedicure2</div>
+        <mwl-calendar-day-view [viewDate]="viewDate"
+                               [events]="events"
+                               [refresh]="refresh"
+                               [hourSegments]="4"
+                               [dayStartHour]="10"
+                               [dayEndHour]="21"
+                               [hourSegmentTemplate]="dayHourSegmentTemplate">
+        </mwl-calendar-day-view>
+
+    </div>
+    <div class="col-md-1" style="margin: 0px;">
+        <div class="ResourceHead" style="margin: 0px;">Pedicure3</div>
+        <mwl-calendar-day-view [viewDate]="viewDate"
+                               [events]="eventsResource1"
+                               [refresh]="refresh"
+                               [hourSegments]="4"
+                               [dayStartHour]="10"
+                               [dayEndHour]="21"
+                                [hourSegmentTemplate]="dayHourSegmentTemplate">
+        </mwl-calendar-day-view>
+
+    </div>
+    <div class="col-md-1">
+        <div class="ResourceHead" style="margin: 0px;">Manicure 1</div>
+        <mwl-calendar-day-view [viewDate]="viewDate"
+                               [events]="events"
+                               [refresh]="refresh"
+                               [hourSegments]="4"
+                               [dayStartHour]="10"
+                               [dayEndHour]="21"
+                               [hourSegmentTemplate]="dayHourSegmentTemplate">
+        </mwl-calendar-day-view>
+
+    </div>
+    <div class="col-md-1" style="margin: 0px;">
+        <div class="ResourceHead" style="margin: 0px;">Manicure 2</div>
+        <mwl-calendar-day-view [viewDate]="viewDate"
+                               [events]="eventsResource1"
+                               [refresh]="refresh"
+                               [hourSegments]="4"
+                               [dayStartHour]="10"
+                               [dayEndHour]="21"
+                                [hourSegmentTemplate]="dayHourSegmentTemplate">
+        </mwl-calendar-day-view>
+
+    </div>
+    <div class="col-md-1">
+        <div class="ResourceHead" style="margin: 0px;">Threading</div>
+        <mwl-calendar-day-view [viewDate]="viewDate"
+                               [events]="events"
+                               [refresh]="refresh"
+                               [hourSegments]="4"
+                               [dayStartHour]="10"
+                               [dayEndHour]="21"
+                               [hourSegmentTemplate]="dayHourSegmentTemplate">
+        </mwl-calendar-day-view>
+
+    </div>
+</div>

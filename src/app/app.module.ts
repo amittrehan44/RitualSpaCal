@@ -13,11 +13,13 @@ import { AngularFireDatabaseModule } from 'angularfire2/database';
 
 //import { CalUtilsModule } from './cal-utils/cal-utils.module';
 import { AppComponent } from './app.component';
+import { ResourcesComponent } from './cal-utils/resources/resources.component';
 import { MyCalendarModule } from './my-calendar/my-calendar.module';
 import { AppRoutingModule } from './app-routing.module';
 import { CoreModule } from './core/core.module';
 import { LoginPageComponent } from './login-page/login-page.component';
 import { AuthGuard } from './core/auth.guard';
+import { AllResourcesModule } from './all-resources/all-resources.module';
 
 
 
@@ -40,12 +42,13 @@ import { AuthGuard } from './core/auth.guard';
       //CalendarModule,
       MyCalendarModule,
       AppRoutingModule,
-      CoreModule
+      CoreModule,
+      AllResourcesModule
   ],
   providers: [AuthGuard],
   exports: [AppComponent
             
             ],
-  bootstrap: [AppComponent]
+    bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -21,6 +21,7 @@ import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
 import { Services } from './services.model';
 import { ChartsComponent } from './charts/charts.component';
 import { ChartsModule as Ng2Charts } from 'ng2-charts';
+import { ResourcesComponent } from './resources/resources.component';
 
 
 @NgModule({
@@ -40,7 +41,7 @@ import { ChartsModule as Ng2Charts } from 'ng2-charts';
       MultiselectDropdownModule,
       Ng2Charts
   ],
-  declarations: [DateTimePickerComponent, CalendarHeaderComponent, CalContextmenuComponent, AppointmentInputComponent, AppointmentListComponent, AppointmentTodayComponent, NavbarComponent, ChartsComponent],
-    exports: [CalendarHeaderComponent, DateTimePickerComponent, CalContextmenuComponent, ContextMenuModule, AppointmentInputComponent, AppointmentListComponent, AppointmentTodayComponent, NavbarComponent ]
+  declarations: [DateTimePickerComponent, CalendarHeaderComponent, CalContextmenuComponent, AppointmentInputComponent, AppointmentListComponent, AppointmentTodayComponent, NavbarComponent, ChartsComponent, ResourcesComponent],
+    exports: [CalendarHeaderComponent, DateTimePickerComponent, CalContextmenuComponent, ContextMenuModule, AppointmentInputComponent, AppointmentListComponent, AppointmentTodayComponent, NavbarComponent, ResourcesComponent ]
 })
 export class CalUtilsModule { }
