@@ -161,9 +161,9 @@ export class ResourcesComponent implements OnInit {
 
 
     /*   events: CalendarEvent[] = []; */
-    events: Array<CalendarEvent<{ $key: string; name: string, phone: string, service: string, gender: string, stylist_title: string, notes: string, email: string, serviceOptionIds: number[], type: string }>> = []
+    events: Array<CalendarEvent<{ $key: string; name: string, phone: string, service: string, gender: string, stylist_title: string, notes: string, chair: string, serviceOptionIds: number[], type: string }>> = []
 
-    eventsResource1: Array<CalendarEvent<{ $key: string; name: string, phone: string, service: string, gender: string, stylist_title: string, notes: string, email: string, serviceOptionIds: number[], type: string }>> = []
+    eventsResource1: Array<CalendarEvent<{ $key: string; name: string, phone: string, service: string, gender: string, stylist_title: string, notes: string, chair: string, serviceOptionIds: number[], type: string }>> = []
 
 
     filteredEvents: eventsAPI[];
@@ -213,7 +213,7 @@ export class ResourcesComponent implements OnInit {
             stylist_title: event.meta.stylist_title,
             gender: event.meta.gender,
             notes: event.meta.notes,
-            email: event.meta.email
+            chair: event.meta.chair
         }
 
         //Place code to fill duration
@@ -233,6 +233,7 @@ export class ResourcesComponent implements OnInit {
         console.log(this._tempMinsStr);
         this._caleventService._durationString1 = this.durationHrs.substring(0, 1) + ":" + this._tempMinsStr;
 
+        //Set the option optionsMultiselect array in Service to select the required service IDs IDs
         this._caleventService.optionsMultiselect = event.meta.serviceOptionIds;
     }
 
@@ -353,7 +354,7 @@ export class ResourcesComponent implements OnInit {
                         notes: this.filteredEvents[i].notes,
                         serviceOptionIds: this.eventServiceIDs[i],
                         type: this.eventType,
-                        email: this.filteredEvents[i].email
+                        chair: this.filteredEvents[i].chair
 
                     }
                 });

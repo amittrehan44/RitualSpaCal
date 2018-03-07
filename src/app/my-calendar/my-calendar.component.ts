@@ -99,7 +99,7 @@ export class MyCalendarComponent implements OnInit {
     refresh: Subject<any> = new Subject();
 
     /*   events: CalendarEvent[] = []; */
-    events: Array<CalendarEvent<{ $key: string; name: string, phone: string, service: string, gender: string, stylist_title: string, notes: string, email: string, serviceOptionIds: number[], type: string }>> = []
+    events: Array<CalendarEvent<{ $key: string; name: string, phone: string, service: string, gender: string, stylist_title: string, notes: string, chair: string, serviceOptionIds: number[], type: string }>> = []
 
     filteredEvents: eventsAPI[];
 
@@ -205,7 +205,7 @@ export class MyCalendarComponent implements OnInit {
             stylist_title: event.meta.stylist_title,
             gender: event.meta.gender,
             notes: event.meta.notes,
-            email: event.meta.email
+            chair: event.meta.chair
         }
 
         //Place code to fill duration
@@ -388,7 +388,7 @@ export class MyCalendarComponent implements OnInit {
                         notes: this.filteredEvents[i].notes,
                         serviceOptionIds: this.eventServiceIDs[i],
                         type: this.eventType,
-                        email: this.filteredEvents[i].email
+                        chair: this.filteredEvents[i].chair
 
                     }
                 });

@@ -66,7 +66,7 @@ export class eventsAPI {
     stylist_title: string;
     gender: string;
     notes: string;
-    email: string;        
+    chair: string;        
 }
 
 @Component({

@@ -114,7 +114,7 @@ export class AppointmentInputComponent implements OnInit {
             stylist_title: '',
             gender: '',
             notes: '',
-            email: ''
+            chair: ''
         }
         this._caleventService.durationString = '0:15';
         
@@ -163,7 +163,7 @@ export class AppointmentInputComponent implements OnInit {
             {
             this._caleventService.selectedAppointment.start = this._caleventService.contextDate;
             this._caleventService.selectedAppointment.end = this._caleventService.contextDate;
-            this._caleventService.selectedAppointment.email = this._caleventService.contextResource;
+            this._caleventService.selectedAppointment.chair = this._caleventService.contextResource;
             this._caleventService.contextDate = null
             this._caleventService.contextResource = null;
         }

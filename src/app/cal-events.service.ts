@@ -114,7 +114,7 @@ export class CalEventsService {
             //end: appointment.end.toString(),
             end: addMinutes(appointment.start, this.duration).toString(),
             notes: appointment.notes,
-            email: appointment.email
+            chair: appointment.chair
            
         });
         console.log("inside insertAppointment Start:" + appointment.start.toString());
@@ -133,7 +133,7 @@ export class CalEventsService {
             //end: appointment.end.toString(),
             end: addMinutes(appointment.start, this.duration).toString(),
             notes: appointment.notes,
-            email: appointment.email
+            chair: appointment.chair
         })
     }
    

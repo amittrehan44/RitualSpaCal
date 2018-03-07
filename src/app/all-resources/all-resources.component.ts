@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Output, EventEmitter, ViewChild, TemplateRef } from '@angular/core';
 import { CalendarEvent, CalendarUtils, CalendarDayViewComponent } from 'angular-calendar';
 
 import { Subject } from 'rxjs/Subject';
@@ -16,8 +16,17 @@ import {
     endOfMonth,
     isSameDay,
     isSameMonth,
-    addHours
+    addHours,
+    differenceInMinutes
 } from 'date-fns';
+
+
+import { CalEventsService } from './../cal-events.service'
+import { CustomEventTitleFormatter } from './../custom-event-title-formatter.service';
+import { AuthService } from './../core/auth.service';
+import { eventsAPI } from './../app.component';
+import { Services } from './../cal-utils/services.model';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 
 const EVENT_WIDTH = 150;
@@ -25,7 +34,7 @@ const EVENT_WIDTH = 150;
 
 // extend the interface to add the array of users
 export interface MyDayView extends DayView {
-    users: any[];
+    chairs: any[];
 }
 
 
@@ -39,9 +48,9 @@ export class MyCalendarUtils extends CalendarUtils {
         view.events.forEach(({ event }) => {
             // assumes user objects are the same references, 
             // if 2 users have the same structure but different object references this will fail
-            if (!users.includes(event.meta.user)) {
-                users.push(event.meta.user);
-                console.log(event.meta.user);
+            if (!chairs.includes(event.meta.chair)) {
+                chairs.push(event.meta.chair);
+                console.log(event.meta.chair);
             }
         });
         
@@ -49,13 +58,13 @@ export class MyCalendarUtils extends CalendarUtils {
         //users.sort((user1, user2) => user1.name.localeCompare(user2.name));
 
         //Added users: any[] in DayView interface under C:\myRepositries\Angular\testCalFolder\AppCalendar\node_modules\calendar-utils\dist\calendar-utils.d.ts
-        view.users = users;
+        view.chairs = chairs;
         view.events = view.events.map((dayViewEvent) => {
-            const index = users.indexOf(dayViewEvent.event.meta.user);
+            const index = chairs.indexOf(dayViewEvent.event.meta.chair);
             dayViewEvent.left = index * EVENT_WIDTH; // change the column of the event
             return dayViewEvent;
         });
-        view.width = users.length * EVENT_WIDTH;
+        view.width = chairs.length * EVENT_WIDTH;
         return view;
     }
 }
@@ -80,8 +89,8 @@ export class MyCalendarUtils extends CalendarUtils {
     template: `
     <div class="cal-day-view" #dayViewContainer>
       <div class="day-view-column-headers">
-        <div class="day-view-column-header" *ngFor="let user of view?.users">
-          {{ user.name }}
+        <div class="day-view-column-header" *ngFor="let chair of view?.chairs">
+          {{ chair.name }}
         </div>
       </div>
       <div class="cal-hour-rows">
@@ -139,27 +148,30 @@ export class MyDayViewComponent extends CalendarDayViewComponent {
 
     @Output() userChanged = new EventEmitter();
 
-    //eventDragged(dayEvent: DayViewEvent, xPixels: number, yPixels: number): void {
-    //    if (yPixels !== 0) {
-    //        super.eventDragged(dayEvent, yPixels); // original behaviour
-    //    }
-    //    if (xPixels !== 0) {
-    //        const columnsMoved = xPixels / EVENT_WIDTH;
-    //        const currentColumnIndex = this.view.users.findIndex(user => user === dayEvent.event.meta.user);
-    //        const newIndex = currentColumnIndex + columnsMoved;
-    //        const newUser = this.view.users[newIndex];
-    //        this.userChanged.emit({ event: dayEvent.event, newUser });
-    //    }
-    //}
+    eventDragged1(dayEvent: DayViewEvent, xPixels: number, yPixels: number): void {
+        if (yPixels !== 0) {
+            super.eventDragged(dayEvent, yPixels); // original behaviour
+        }
+        if (xPixels !== 0) {
+            const columnsMoved = xPixels / EVENT_WIDTH;
+            const currentColumnIndex = this.view['chairs'].findIndex(chair => chair === dayEvent.event.meta.chair);
+            const newIndex = currentColumnIndex + columnsMoved;
+            const newUser = this.view['chairs'][newIndex];
+            this.userChanged.emit({ event: dayEvent.event, newUser });
+        }
+    }
 
 }
 
-const users = [{
-    id: 0,
-    name: 'TX Room1'
+
+/***************************************************************** */
+
+const chairs = [{
+        id: 0,
+        name: 'TX Room1'
     },
     {
-    id: 1,
+        id: 1,
         name: 'TX Room2'
     },
     {
@@ -188,7 +200,7 @@ const users = [{
 }];
 
 
-/***************************************************************** */
+
 
 export const colors: any = {
     red: {
@@ -221,72 +233,325 @@ export const colors: any = {
 export class AllResourcesComponent implements OnInit {
     view: string = 'day';
     viewDate: Date = new Date();
-
     refresh: Subject<any> = new Subject();
 
-    events: CalendarEvent[] = [{
-        title: 'An event smith',
-        color: colors.yellow,
-        start: addHours(startOfDay(new Date()), 5),
-        meta: {
-            user: users[0]
-        },
-        resizable: {
-            beforeStart: true,
-            afterEnd: true
-        },
-        draggable: true
-    }, {
-        title: 'Another event dae',
-        color: colors.blue,
-        start: addHours(startOfDay(new Date()), 2),
-        meta: {
-            user: users[1]
-        },
-        resizable: {
-            beforeStart: true,
-            afterEnd: true
-        },
-        draggable: true
-    }, {
-        title: 'An 3rd event smith',
-        color: colors.red,
-        start: addHours(startOfDay(new Date()), 7),
-        meta: {
-            user: users[0]
-        },
-        resizable: {
-            beforeStart: true,
-            afterEnd: true
-        },
-        draggable: true
-        },
-        {
-            title: 'Apna Event dae',
-            color: colors.red,
-            start: addHours(startOfDay(new Date()), -7),
-            meta: {
-                user: users[1]
-            },
-            resizable: {
-                beforeStart: true,
-                afterEnd: true
-            },
-            draggable: true
-        },
-        {
-            title: 'Ek hoor Event bhatti',
-            color: colors.red,
-            start: addHours(startOfDay(new Date()), -7),
-            meta: {
-                user: users[2]
-            },
-            resizable: {
-                beforeStart: true,
-                afterEnd: true
-            },
-            draggable: true
-        }];
+    @ViewChild('modalContent') modalContent: TemplateRef<any>;
+    modalRef: NgbModalRef;
+
+
+    filteredEvents: eventsAPI[];
+
+    eventService: Services[];
+    evenServicesName: string[];
+    //   eventServiceJoin: string;
+    eventServiceJoin1: string[] = [];
+    serviceIds: number[] = [];
+    eventServiceIDs: Array<number[]> = [];
+
+
+    activeDayIsOpen: boolean = true;
+    durationMins: number;
+    durationHrs: string;
+    _tempMins: number;
+    _tempMinsStr: string;
+
+
+
+    /*   events: CalendarEvent[] = []; */
+    events: Array<CalendarEvent<{ $key: string; name: string, phone: string, service: string, gender: string, stylist_title: string, notes: string, chair: any, serviceOptionIds: number[], type: string }>> = []
+
+
+    eventColor: any;
+    eventType: string;
+    /* used to sort the dates in filteredevents array */
+    dat1: Date = new Date();
+    dat2: Date = new Date();
+
+    modalData: {
+        action: string;
+        event: CalendarEvent;
+    };
+
+    createModalRef: NgbModalRef;
+
+    constructor(public _caleventService: CalEventsService, public auth: AuthService, public modal: NgbModal) { }
+
+    ngOnInit() {
+
+        var x = this._caleventService.getFirebaseData();
+        x.snapshotChanges().subscribe(item => {
+            this.filteredEvents = [];
+            this.eventServiceJoin1 = [];
+            this.eventServiceIDs = [];
+            item.forEach(element => {
+                var y = element.payload.toJSON();
+                y["$key"] = element.key;
+                this.filteredEvents.push(y as eventsAPI);
+
+            });
+            console.log(this.filteredEvents);
+            this.sortByDate();
+            this.loadServices();
+            //call load events in load services
+            //            this.loadevents();
+
+        });
+    }
+
+
+    public sortByDate(): void {
+        this.filteredEvents.sort((a: eventsAPI, b: eventsAPI) => {
+
+            this.dat1 = new Date(a.start);
+            this.dat2 = new Date(b.start);
+            return this.dat1.getTime() - this.dat2.getTime();
+
+
+        });
+    }
+
+    //this function is used to diplay Modal when event is clicked
+
+    handleEvent(action: string, event: CalendarEvent): void {
+        this.modalData = { event, action };
+        //this.modalRef = this.modal.open(this.modalContent, { size: 'sm' });
+        this.modalRef = this.modal.open(this.modalContent, { size: 'lg' });
+        console.log(event);
+        console.log(this.modalRef);
+        // Assign values of selected appointment to selected events
+        /* this._caleventService.appointmentToUpdate.$key = event.meta.$key;
+        this._caleventService.appointmentToUpdate.firstname = event.meta.firstname;
+        this._caleventService.appointmentToUpdate.lastname = event.meta.lastname;
+        this._caleventService.appointmentToUpdate.gender = event.meta.gender;
+        this._caleventService.appointmentToUpdate.stylist_title = event.meta.stylist_title;
+        this._caleventService.appointmentToUpdate.start = event.start;
+        this._caleventService.appointmentToUpdate.end = event.end;
+        */
+        this._caleventService.appointmentToUpdate = {
+            $key: event.meta.$key,
+            name: event.meta.name,
+            phone: event.meta.phone,
+            service: event.meta.service,
+            start: event.start,
+            end: event.end,
+            stylist_title: event.meta.stylist_title,
+            gender: event.meta.gender,
+            notes: event.meta.notes,
+            chair: event.meta.chair
+        }
+
+        //Place code to fill duration
+        this.durationMins = differenceInMinutes(event.end, event.start);
+        this.durationHrs = Number(this.durationMins / 60).toFixed(2);
+        console.log(this.durationHrs);
+        console.log(Number(Number(this.durationHrs.substring(2, 4)) / 100) * 60);
+        this._tempMins = Math.round(Number(Number(this.durationHrs.substring(2, 4)) / 100) * 60);
+
+        if (this._tempMins > 9) {
+            this._tempMinsStr = this._tempMins.toString();
+        }
+        else {
+            this._tempMinsStr = "0" + this._tempMins;
+        }
+
+        console.log(this._tempMinsStr);
+        this._caleventService._durationString1 = this.durationHrs.substring(0, 1) + ":" + this._tempMinsStr;
+
+        //Set the option optionsMultiselect array in Service to select the required service IDs IDs
+        this._caleventService.optionsMultiselect = event.meta.serviceOptionIds;
+    }
+
+
+    loadServices(): void {
+        //initialize to empty array in ngOnInit menthod
+        //this.eventServiceJoin1 = [];
+        //this.eventServiceIDs = [];
+
+        for (var i: number = 0; i < this.filteredEvents.length; i++) {
+
+            //get all services in new array from firebase
+            var z = this._caleventService.getFirebaseServiceData(this.filteredEvents[i].$key);
+            var eventServiceJoin: string;
+            z.snapshotChanges().subscribe(item => {
+                this.eventService = [];
+                this.evenServicesName = [];
+                this._caleventService.optionsMultiselect = [];
+                this.serviceIds = [];
+                //this.eventServiceJoin1 = [];
+                item.forEach(element => {
+                    var y = element.payload.toJSON();
+                    // y["$key"] = element.key;
+                    this.eventService.push(y as Services);
+                    this.evenServicesName.push(y["name"]);
+                    //this._caleventService.optionsMultiselect.push(y["id"]);
+                    this.serviceIds.push(y["id"]);
+                    //console.log(y["name"]);
+                });
+                //                console.log(this.evenServicesName.join());
+                eventServiceJoin = this.evenServicesName.join();
+                this.eventServiceJoin1.push(eventServiceJoin);
+
+                this.eventServiceIDs.push(this.serviceIds);
+
+                //this.eventServiceJoinIds.push(this.eventServiceJoin);
+
+                //call load events here
+                return this.loadevents();
+            });
+
+        }
+
+    }
+
+
+    loadevents(): void {
+        const eventService: string[] = [];
+        this.events = [];
+        if (this.eventServiceJoin1.length == this.filteredEvents.length) {
+            for (var i: number = 0; i < this.eventServiceJoin1.length; i++) {
+
+                //Select Color as per stylist & Load the Resources
+                if (this.filteredEvents[i].stylist_title == "Gurpreet") {
+                    this.eventColor = colors.red;
+                    this.eventType = "danger";
+                    
+                }
+                else if (this.filteredEvents[i].stylist_title == "Meena") {
+                    this.eventColor = colors.blue;
+                    this.eventType = "info";
+                }
+                else {
+                    this.eventColor = colors.yellow;
+                    this.eventType = "warning";
+                }
+
+
+                //get all services in new array
+                /*           
+                           var z = this._caleventService.getFirebaseServiceData(this.filteredEvents[i].$key);
+                           z.snapshotChanges().subscribe(item => {
+                               this.eventService = [];
+                               this.evenServicesName = [];
+                               item.forEach(element => {
+                                   var y = element.payload.toJSON();
+                                   // y["$key"] = element.key;
+                                   this.eventService.push(y as Services);
+                                   this.evenServicesName.push(y["name"]);
+                                   console.log(y["name"]);
+                               });
+                               console.log(this.evenServicesName.join());
+                               this.eventServiceJoin = this.evenServicesName.join();
+                           });
+               
+                
+
+                console.log(i);
+                console.log(this.filteredEvents[i].name);
+                console.log(this.eventServiceJoin1[i]);
+ */
+                this.events.push({
+                    title: this.filteredEvents[i].stylist_title,
+                    start: new Date(this.filteredEvents[i].start),
+                    end: new Date(this.filteredEvents[i].end),
+                    color: this.eventColor,
+                    draggable: false,
+                    allDay: false,
+                    resizable: {
+                        beforeStart: false,
+                        afterEnd: false
+                    },
+                    meta: {
+
+                        $key: this.filteredEvents[i].$key,
+                        name: this.filteredEvents[i].name,
+                        phone: this.filteredEvents[i].phone,
+                        service: this.eventServiceJoin1[i],
+                        gender: this.filteredEvents[i].gender,
+                        stylist_title: this.filteredEvents[i].stylist_title,
+                        notes: this.filteredEvents[i].notes,
+                        serviceOptionIds: this.eventServiceIDs[i],
+                        type: this.eventType,
+                        chair: chairs[0]
+
+                    }
+                });
+                this.refresh.next();
+
+
+
+            };
+        }
+        
+    }
+
+
+    open(modalAppointmentForm) {
+        this.createModalRef = this.modal.open(modalAppointmentForm, { size: 'lg' });
+
+    }
+    //events: CalendarEvent[] = [{
+    //    title: 'An event smith',
+    //    color: colors.yellow,
+    //    start: addHours(startOfDay(new Date()), 5),
+    //    meta: {
+    //        chair: chairs[0]
+    //    },
+    //    resizable: {
+    //        beforeStart: true,
+    //        afterEnd: true
+    //    },
+    //    draggable: true
+    //}, {
+    //    title: 'Another event dae',
+    //    color: colors.blue,
+    //    start: addHours(startOfDay(new Date()), 2),
+    //    meta: {
+    //        chair: chairs[1]
+    //    },
+    //    resizable: {
+    //        beforeStart: true,
+    //        afterEnd: true
+    //    },
+    //    draggable: true
+    //}, {
+    //    title: 'An 3rd event smith',
+    //    color: colors.red,
+    //    start: addHours(startOfDay(new Date()), 7),
+    //    meta: {
+    //        chair: chairs[0]
+    //    },
+    //    resizable: {
+    //        beforeStart: true,
+    //        afterEnd: true
+    //    },
+    //    draggable: true
+    //    },
+    //    {
+    //        title: 'Apna Event dae',
+    //        color: colors.red,
+    //        start: addHours(startOfDay(new Date()), -7),
+    //        meta: {
+    //            chair: chairs[1]
+    //        },
+    //        resizable: {
+    //            beforeStart: true,
+    //            afterEnd: true
+    //        },
+    //        draggable: true
+    //    },
+    //    {
+    //        title: 'Ek hoor Event bhatti',
+    //        color: colors.red,
+    //        start: addHours(startOfDay(new Date()), -7),
+    //        meta: {
+    //            chair: chairs[2]
+    //        },
+    //        resizable: {
+    //            beforeStart: true,
+    //            afterEnd: true
+    //        },
+    //        draggable: true
+    //    }];
 
     //eventTimesChanged({ event, newStart, newEnd }: CalendarEventTimesChangedEvent): void {
     //    event.start = newStart;
@@ -295,11 +560,10 @@ export class AllResourcesComponent implements OnInit {
     //}
 
     userChanged({ event, newUser }) {
-        event.meta.user = newUser;
+        event.meta.chair = newUser;
         this.refresh.next();
     }
 
-  ngOnInit() {
-  }
+  
 
 }
