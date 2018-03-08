@@ -330,11 +330,11 @@ export class MyCalendarComponent implements OnInit {
             for (var i: number = 0; i < this.eventServiceJoin1.length; i++) {
 
                 //Select Color as per stylist
-                if (this.filteredEvents[i].stylist_title == "Gurpreet") {
+                if (this.filteredEvents[i].stylist_title == "Dave") {
                     this.eventColor = colors.red;
                     this.eventType = "danger";
                 }
-                else if (this.filteredEvents[i].stylist_title == "Meena") {
+                else if (this.filteredEvents[i].stylist_title == "Monika") {
                     this.eventColor = colors.blue;
                     this.eventType = "info";
                 }

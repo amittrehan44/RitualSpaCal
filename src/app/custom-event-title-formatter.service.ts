@@ -23,8 +23,9 @@ export class CustomEventTitleFormatter extends CalendarEventTitleFormatter {
     }
 
     day(event: CalendarEvent): string {
-        return`
-        ${event.title} : ${event.meta.service} for ${event.meta.name}  ${event.meta.phone}  `;
+        //return`
+        //${event.title} : ${event.meta.service} for ${event.meta.name}  ${event.meta.phone}  `;
+        return `${event.meta.name} ( ${event.meta.service} )`
     }
 }
 

@@ -12,14 +12,14 @@
         </select><br />-->
 
 
-        <input type="radio" name="chair" #email="ngModel" value="TX R1" [(ngModel)]="_caleventService.selectedAppointment.chair"> TX R1
-        <input type="radio" name="chair" #email="ngModel" value="TX R2" [(ngModel)]="_caleventService.selectedAppointment.chair"> TX R2
-        <input type="radio" name="chair" #email="ngModel" value="Pedi 1" [(ngModel)]="_caleventService.selectedAppointment.chair"> Pedi 1
-        <input type="radio" name="chair" #email="ngModel" value="Pedi 2" [(ngModel)]="_caleventService.selectedAppointment.chair"> Pedi 2
-        <input type="radio" name="chair" #email="ngModel" value="Pedi 3" [(ngModel)]="_caleventService.selectedAppointment.chair"> Pedi 3
+        <input type="radio" name="chair" #email="ngModel" value="TX Room1" [(ngModel)]="_caleventService.selectedAppointment.chair"> TX R1
+        <input type="radio" name="chair" #email="ngModel" value="Manicure 1" [(ngModel)]="_caleventService.selectedAppointment.chair"> Mani 1
+        <input type="radio" name="chair" #email="ngModel" value="Pedicure 1" [(ngModel)]="_caleventService.selectedAppointment.chair"> Pedi 1
+        <input type="radio" name="chair" #email="ngModel" value="Pedicure 3" [(ngModel)]="_caleventService.selectedAppointment.chair"> Pedi 3
         <br />
-        <input type="radio" name="chair" #email="ngModel" value="Mani 1" [(ngModel)]="_caleventService.selectedAppointment.chair"> Mani 1
-        <input type="radio" name="chair" #email="ngModel" value="Mani 2" [(ngModel)]="_caleventService.selectedAppointment.chair"> Mani 2
+        <input type="radio" name="chair" #email="ngModel" value="TX Room2" [(ngModel)]="_caleventService.selectedAppointment.chair"> TX R2
+        <input type="radio" name="chair" #email="ngModel" value="Manicure 2" [(ngModel)]="_caleventService.selectedAppointment.chair"> Mani 2
+        <input type="radio" name="chair" #email="ngModel" value="Pedicure 2" [(ngModel)]="_caleventService.selectedAppointment.chair"> Pedi 2
         <input type="radio" name="chair" #email="ngModel" value="Threading" [(ngModel)]="_caleventService.selectedAppointment.chair"> Threading
         
         
@@ -65,11 +65,19 @@
 
         <div class="form-group col-md-6">
             <label>Stylist:</label>
-            <input type="radio" name="stylist_title" value="Gurpreet" [(ngModel)]="_caleventService.selectedAppointment.stylist_title"> Gurpreet
-            <input type="radio" name="stylist_title" value="Meena" [(ngModel)]="_caleventService.selectedAppointment.stylist_title"> Meena
-            <input type="radio" name="stylist_title" value="Other" [(ngModel)]="_caleventService.selectedAppointment.stylist_title"> Other
+            <input type="radio" name="stylist_title" value="Dave" [(ngModel)]="_caleventService.selectedAppointment.stylist_title"> Dave
+            <input type="radio" name="stylist_title" value="Monika" [(ngModel)]="_caleventService.selectedAppointment.stylist_title"> Monika
+            <input type="radio" name="stylist_title" value="Any" [(ngModel)]="_caleventService.selectedAppointment.stylist_title"> Any
             <div class="form-group col-md-12">
                 <input class="form-control" list="stylist" name="stylist_title" #stylist_title="ngModel" [(ngModel)]="_caleventService.selectedAppointment.stylist_title" placeholder="Stylist">
+                <datalist id="stylist">
+                    <option>Karman </option>
+                    <option>Simmi</option>
+                    <option>Yogita</option>
+                    <option>Navi</option>
+                    <option>Rinki</option>
+                    <option>Sukh</option>
+                </datalist>
             </div>
         </div>
 
@@ -134,6 +142,8 @@
         
     </div>
 -->
+
+<!--
     <div class="row container col-md-12">
         <div class="form-group col-md-6">
             <label>Chair</label>
@@ -141,7 +151,8 @@
 
         </div>
     </div>
-        
+ 
+ -->         
         <div class="row container col-md-12">
             <div class="form-group col-md-12">
                 <label>Notes</label>

@@ -103,61 +103,61 @@ export class ResourcesComponent implements OnInit {
 
 
     createModalRef: NgbModalRef;
-    //events: CalendarEvent[] = [
-    //    {
-    //        start: new Date('2018-02-23'),
-    //        title: 'One day excluded event',
-    //        color: colors.red
-    //    },
-    //    {
-    //        start: new Date(),
-    //        title: 'aaj da event',
-    //        color: colors.red
-    //    },
-    //    {
-    //        start: new Date('2018-02-24'),
-    //        title: 'Multiple weeks',
-    //        color: colors.blue
-    //    },
-    //    {
-    //        start: new Date('2018-02-25'),
-    //        title: 'Multiple weeks event',
-    //        color: colors.blue
-    //    }
-    //];
+    events2: CalendarEvent[] = [
+        {
+            start: new Date('2018-02-23'),
+            title: 'One day excluded event',
+            color: colors.red
+        },
+        {
+            start: new Date(),
+            title: 'aaj da event',
+            color: colors.red
+        },
+        {
+            start: new Date('2018-02-24'),
+            title: 'Multiple weeks',
+            color: colors.blue
+        },
+        {
+            start: new Date('2018-02-25'),
+            title: 'Multiple weeks event',
+            color: colors.blue
+        }
+    ];
 
-    //events1: CalendarEvent[] = [
-    //    {
-    //        start: subDays(startOfDay(new Date()), 1),
-    //        end: addDays(new Date(), 1),
-    //        title: 'A 3 day event',
-    //        color: colors.red
+    events1: CalendarEvent[] = [
+        {
+            start: subDays(startOfDay(new Date()), 1),
+            end: addDays(new Date(), 1),
+            title: 'A 3 day event',
+            color: colors.red
 
-    //    },
-    //    {
-    //        start: startOfDay(new Date()),
-    //        title: 'An event with no end date',
-    //        color: colors.yellow
+        },
+        {
+            start: startOfDay(new Date()),
+            title: 'An event with no end date',
+            color: colors.yellow
 
-    //    },
-    //    {
-    //        start: subDays(endOfMonth(new Date()), 3),
-    //        end: addDays(endOfMonth(new Date()), 3),
-    //        title: 'A long event that spans 2 months',
-    //        color: colors.blue
-    //    },
-    //    {
-    //        start: addHours(startOfDay(new Date()), 2),
-    //        end: new Date(),
-    //        title: 'A draggable and resizable event',
-    //        color: colors.yellow,
-    //        resizable: {
-    //            beforeStart: true,
-    //            afterEnd: true
-    //        },
-    //        draggable: true
-    //    }
-    //];
+        },
+        {
+            start: subDays(endOfMonth(new Date()), 3),
+            end: addDays(endOfMonth(new Date()), 3),
+            title: 'A long event that spans 2 months',
+            color: colors.blue
+        },
+        {
+            start: addHours(startOfDay(new Date()), 2),
+            end: new Date(),
+            title: 'A draggable and resizable event',
+            color: colors.yellow,
+            resizable: {
+                beforeStart: true,
+                afterEnd: true
+            },
+            draggable: true
+        }
+    ];
 
 
     /*   events: CalendarEvent[] = []; */

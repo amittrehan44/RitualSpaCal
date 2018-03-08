@@ -58,15 +58,24 @@ export class AppointmentInputComponent implements OnInit {
 
 
         //for service multiselect
+
         this.myServiceOptions = [
-            { id: 1, name: 'Waxing' },
-            { id: 2, name: 'Trimming' },
-            { id: 3, name: 'Haircut' },
-            { id: 4, name: 'Laser' },
-            { id: 5, name: 'Other' },
+            { id: 1, name: 'Face Waxing' },
+            { id: 2, name: 'Threading' },
+            { id: 3, name: 'Body Waxing' },
+            { id: 4, name: 'Body Massage' },
+            { id: 5, name: 'Facial' },
+            { id: 6, name: 'Manicure' },
+            { id: 7, name: 'Pedicure' },
+            { id: 8, name: 'Make-Up App' },
+            { id: 9, name: 'AntiAging Treat' },
+            { id: 10, name: 'Body Treat' },
+            { id: 11, name: 'Skin Irregularities' },
+            { id: 12, name: 'Chemical Peels' },
+            { id: 13, name: 'Bust Firming' }
         ]; 
 
-        this.setServices();
+
 /*
         this.myServiceOptions= [
             { id: 1, name: 'Car brands', isLabel: true },
@@ -78,7 +87,8 @@ export class AppointmentInputComponent implements OnInit {
             { id: 7, name: 'Red', parentId: 5 },
             { id: 8, name: 'White', parentId: 5 }
         ];   
-*/          
+ */
+        this.setServices();  
     }
 
     //for service multiselect

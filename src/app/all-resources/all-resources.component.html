@@ -1,6 +1,5 @@
 <app-navbar></app-navbar>
 
-
 <!--Create Appointment Modal Starts-->
 
 <div class="col-sm-12 space"></div>
@@ -68,9 +67,7 @@
     </div>
 </ng-template>
 
-
 <!--Calander Header Starts with Next and Previous-->
-
 <div class="row text-center" style="margin-bottom: 10px;">
     <div class="col-md-12">
         <div class="btn-group">
@@ -96,18 +93,24 @@
         </div>
     </div>
     <div class="col-md-12">
-        <h3 >{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
+        <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
+        <div class="wrapper">
+            <button class="btn btn-primary" (click)="open(modalAppointmentForm)">Add Appointment</button>
+        </div>
     </div>
 
 </div>
 
+
+
 <my-calendar-day-view [viewDate]="viewDate"
                       [events]="events"
+                      [eventWidth]="130"
                       [refresh]="refresh"
                       (userChanged)="userChanged($event)"
-                       (eventClicked)="handleEvent('Clicked',  $event.event)"
-                               [hourSegments]="4"
-                               [dayStartHour]="10"
-                               [dayEndHour]="21"
-                               [hourSegmentTemplate]="dayHourSegmentTemplate">
+                      (eventClicked)="handleEvent('Clicked',  $event.event)"
+                      [hourSegments]="4"
+                      [dayStartHour]="10"
+                      [dayEndHour]="21"
+                      [hourSegmentTemplate]="dayHourSegmentTemplate">
 </my-calendar-day-view>

@@ -1,0 +1,23 @@
+[debug] [2018-03-07T23:50:58.649Z] ----------------------------------------------------------------------
+[debug] [2018-03-07T23:50:58.652Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\atrehan\AppData\Roaming\npm\node_modules\firebase-tools\bin\firebase experimental:functions:shell
+[debug] [2018-03-07T23:50:58.653Z] CLI Version:   3.15.2
+[debug] [2018-03-07T23:50:58.653Z] Platform:      win32
+[debug] [2018-03-07T23:50:58.653Z] Node Version:  v6.11.4
+[debug] [2018-03-07T23:50:58.653Z] Time:          Wed Mar 07 2018 15:50:58 GMT-0800 (Pacific Standard Time)
+[debug] [2018-03-07T23:50:58.653Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2018-03-07T23:50:58.670Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2018-03-07T23:50:58.671Z] > authorizing via signed-in user
+[debug] [2018-03-07T23:50:58.673Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/ritualspadev  
+ Wed Mar 07 2018 15:50:58 GMT-0800 (Pacific Standard Time)
+[debug] [2018-03-07T23:50:59.075Z] <<< HTTP RESPONSE 200
+[debug] [2018-03-07T23:50:59.076Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/ritualspadev/tokens  
+ Wed Mar 07 2018 15:50:59 GMT-0800 (Pacific Standard Time)
+[debug] [2018-03-07T23:50:59.478Z] <<< HTTP RESPONSE 200
+[info] i  functions: Preparing to emulate functions.
+[debug] [2018-03-07T23:50:59.995Z] >>> HTTP REQUEST GET https://appengine.googleapis.com/v1/apps/ritualspadev  
+ Wed Mar 07 2018 15:50:59 GMT-0800 (Pacific Standard Time)
+[debug] [2018-03-07T23:50:59.996Z] >>> HTTP REQUEST GET https://apikeys.googleapis.com/v1/projects/ritualspadev/apiKeys  
+ Wed Mar 07 2018 15:50:59 GMT-0800 (Pacific Standard Time)
+[debug] [2018-03-07T23:51:00.333Z] <<< HTTP RESPONSE 200
+[debug] [2018-03-07T23:51:00.472Z] <<< HTTP RESPONSE 200

@@ -29,7 +29,7 @@ import { Services } from './../cal-utils/services.model';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 
-const EVENT_WIDTH = 150;
+const EVENT_WIDTH = 130;
 
 
 // extend the interface to add the array of users
@@ -81,16 +81,22 @@ export class MyCalendarUtils extends CalendarUtils {
       margin-left: 70px;
     }
     .day-view-column-header {
-      width: 150px;
+      width: 130px;
       border: solid 1px black;
-      text-align: center
+      text-align: center;
+       background-color: lightgrey;
+
     }
+ a{
+    color: #000000  !important;
+     text-decoration: none;
+}
   `],
     template: `
     <div class="cal-day-view" #dayViewContainer>
       <div class="day-view-column-headers">
         <div class="day-view-column-header" *ngFor="let chair of view?.chairs">
-          {{ chair.name }}
+        <a><b>  {{ chair.name }} </b></a>
         </div>
       </div>
       <div class="cal-hour-rows">
@@ -214,6 +220,10 @@ export const colors: any = {
     yellow: {
         primary: '#e3bc08',
         secondary: '#FDF1BA'
+    },
+    green: {
+        primary: '#00ff00',
+        secondary: '#d0ffd0'
     }
 };
 
@@ -337,7 +347,7 @@ export class AllResourcesComponent implements OnInit {
             stylist_title: event.meta.stylist_title,
             gender: event.meta.gender,
             notes: event.meta.notes,
-            chair: event.meta.chair
+            chair: event.meta.chair.name
         }
 
         //Place code to fill duration
@@ -403,6 +413,26 @@ export class AllResourcesComponent implements OnInit {
 
     }
 
+    getChair(chairName: string): number {
+        if (chairName =="TX Room1")
+            return 0
+        else if (chairName == "TX Room2")
+            return 1
+        else if (chairName == "Pedicure 1")
+            return 2
+        else if (chairName == "Pedicure 2")
+            return 3
+        else if (chairName == "Pedicure 3")
+            return 4
+        else if (chairName == "Manicure 1")
+            return 5
+        else if (chairName == "Manicure 2")
+            return 6
+        else if (chairName == "Threading")
+            return 7
+        else 
+            return 0
+    }
 
     loadevents(): void {
         const eventService: string[] = [];
@@ -411,12 +441,33 @@ export class AllResourcesComponent implements OnInit {
             for (var i: number = 0; i < this.eventServiceJoin1.length; i++) {
 
                 //Select Color as per stylist & Load the Resources
-                if (this.filteredEvents[i].stylist_title == "Gurpreet") {
+                if (this.filteredEvents[i].stylist_title == "Dave") {
                     this.eventColor = colors.red;
                     this.eventType = "danger";
+
+                }
+                else if (this.filteredEvents[i].stylist_title == "Monika") {
+                    this.eventColor = colors.blue;
+                    this.eventType = "info";
+                }
+                else {
+                    this.eventColor = colors.yellow;
+                    this.eventType = "warning";
+                }
+
+
+
+                ////Select Color as per stylist & Load the Resources
+                if (this.filteredEvents[i].chair == "TX Room1" || this.filteredEvents[i].chair == "TX Room2") {
+                    this.eventColor = colors.red;
+                    
                     
                 }
-                else if (this.filteredEvents[i].stylist_title == "Meena") {
+                else if (this.filteredEvents[i].chair == "Manicure 1" || this.filteredEvents[i].chair == "Manicure 2") {
+                    this.eventColor = colors.green;
+                    this.eventType = "info";
+                }
+                else if (this.filteredEvents[i].chair == "Pedicure 1" || this.filteredEvents[i].chair == "Pedicure 2" || this.filteredEvents[i].chair == "Pedicure 3")  {
                     this.eventColor = colors.blue;
                     this.eventType = "info";
                 }
@@ -449,6 +500,8 @@ export class AllResourcesComponent implements OnInit {
                 console.log(this.filteredEvents[i].name);
                 console.log(this.eventServiceJoin1[i]);
  */
+
+                var l = this.getChair(this.filteredEvents[i].chair);
                 this.events.push({
                     title: this.filteredEvents[i].stylist_title,
                     start: new Date(this.filteredEvents[i].start),
@@ -471,7 +524,7 @@ export class AllResourcesComponent implements OnInit {
                         notes: this.filteredEvents[i].notes,
                         serviceOptionIds: this.eventServiceIDs[i],
                         type: this.eventType,
-                        chair: chairs[0]
+                        chair: chairs[l]
 
                     }
                 });
@@ -487,6 +540,12 @@ export class AllResourcesComponent implements OnInit {
 
     open(modalAppointmentForm) {
         this.createModalRef = this.modal.open(modalAppointmentForm, { size: 'lg' });
+
+    }
+
+    onCloseModal(message: string) {
+        console.log(message);
+
 
     }
     //events: CalendarEvent[] = [{
@@ -558,6 +617,7 @@ export class AllResourcesComponent implements OnInit {
     //    event.end = newEnd;
     //    this.refresh.next();
     //}
+    
 
     userChanged({ event, newUser }) {
         event.meta.chair = newUser;

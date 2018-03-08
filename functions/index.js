@@ -79,15 +79,15 @@ exports.textStatus = functions.database
                            }
                            const textMessage = {
                                //body: `Hello ${name}, you have an Appointment on ${start} - Saddhers`,
-                               body: `You have an Appointment on ${start} - Saddhers Hair & Beauty Salon. If you need to reschedule please call 604-746-4786`,
+                               body: `You have an Appointment on ${start} - Ritual Spa. If you need to reschedule please call (604) 381-3860`,
                                //to: +17787792744,
                                to: phoneNumber,  // Text to this number
                                from: twilioNumber // From a valid Twilio number
                            }
                            console.log('Sending messge to' + name + 'on phone number' + phoneNumber + 'on ' + start )
-                           /*  return client.messages.create(textMessage).then(message => console.log(message.sid, 'success'))
+                            return client.messages.create(textMessage).then(message => console.log(message.sid, 'success'))
                                                                      .catch(err => console.log(err))
-                          */
+                          
                        })
                        
        });
@@ -123,7 +123,7 @@ exports.dailySMSReminder = functions.https.onRequest((req, res) => {
     currentDate.setHours(currentDate.getHours() - 8)
 
     //Add number of hours to the point when client wants to send reminders
-    // Example if at 6PM then and 6 hours to current date
+    // Example if at 6PM then and 6 or more hours to current date to make it next day
     currentDate.setHours(currentDate.getHours() + 7)
     const getDate = currentDate.toDateString();
 
@@ -148,7 +148,8 @@ exports.dailySMSReminder = functions.https.onRequest((req, res) => {
                 }
 
                 const textMessage = {
-                    body: `Hello ${name}, you have an Appointment tomorrow on ${start} - Saddhers`,
+                    //body: `Hello ${name}, you have an Appointment tomorrow on ${start} - Ritual Spa, If you need to reschedule please call (604) 381-3860`,
+                    body: `You have an Appointment booked on ${start} - Ritual Spa. If you need to reschedule please call (604) 381-3860`,
                     //to: +17787792744,
                     to: phoneNumber1,  // Text to this number
                     from: twilioNumber // From a valid Twilio number

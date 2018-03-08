@@ -1,6 +1,6 @@
 {
   "projects": {
-    "default": "my-cal-app-9a044",
-    "production": "saddhersprod"
+    "ritualspadev": "ritualspadev",
+    "default": "ritualspadev"
   }
 }

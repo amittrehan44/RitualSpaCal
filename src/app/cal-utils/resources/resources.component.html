@@ -118,8 +118,8 @@
 <div class="row">
     <div class="col-md-2" style="margin: 0px; ">
         <div class="ResourceHead" style="margin: 0px;">
-           <div><b>TX Room1</b></div> 
-            <button class="btn btn-primary" (click)="open(modalAppointmentForm); _caleventService.contextResource = 'Mani 2'">Add</button>
+           <div><b>TX R1</b></div> 
+          <!--  <button class="btn btn-primary" (click)="open(modalAppointmentForm); _caleventService.contextResource = 'Manicure 2'">Add</button> -->
         </div>
         
         <mwl-calendar-day-view [viewDate]="viewDate"
@@ -134,9 +134,9 @@
         
     </div>
     <div class="col-md-2">
-        <div class="ResourceHead" style="margin: 0px;">TX Room2</div>
+        <div class="ResourceHead" style="margin: 0px;"><b>TX R2</b></div>
  <mwl-calendar-day-view [viewDate]="viewDate"
-                               [events]="events"
+                               [events]="events2"
                                [refresh]="refresh"
                                (eventClicked)="handleEvent('Clicked', $event.event)"
                                [hourSegments]="4"
@@ -161,7 +161,7 @@
     <div class="col-md-2">
         <div class="ResourceHead" style="margin: 0px;">Pedicure2</div>
         <mwl-calendar-day-view [viewDate]="viewDate"
-                               [events]="events"
+                               [events]="events2"
                                [refresh]="refresh"
                                [hourSegments]="4"
                                [dayStartHour]="10"
@@ -185,7 +185,7 @@
     <div class="col-md-1">
         <div class="ResourceHead" style="margin: 0px;">Manicure 1</div>
         <mwl-calendar-day-view [viewDate]="viewDate"
-                               [events]="events"
+                               [events]="events2"
                                [refresh]="refresh"
                                [hourSegments]="4"
                                [dayStartHour]="10"
@@ -209,7 +209,7 @@
     <div class="col-md-1">
         <div class="ResourceHead" style="margin: 0px;">Threading</div>
         <mwl-calendar-day-view [viewDate]="viewDate"
-                               [events]="events"
+                               [events]="events2"
                                [refresh]="refresh"
                                [hourSegments]="4"
                                [dayStartHour]="10"
