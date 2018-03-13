@@ -1,11 +1,11 @@
 export const environment = {
     production: true,
     firebase: {
-        //apiKey: "AIzaSyDoM6bYHJhLH6-VQn5iVoLMK_ERkY19rUY",
-        //authDomain: "saddhersprod.firebaseapp.com",
-        //databaseURL: "https://saddhersprod.firebaseio.com",
-        //projectId: "saddhersprod",
-        //storageBucket: "saddhersprod.appspot.com",
-        //messagingSenderId: "805410195724"
+        apiKey: "AIzaSyA7OurIIV3VQ0LT9BQLgAJkai7InjQoLD8",
+        authDomain: "ritualspaprod.firebaseapp.com",
+        databaseURL: "https://ritualspaprod.firebaseio.com",
+        projectId: "ritualspaprod",
+        storageBucket: "ritualspaprod.appspot.com",
+        messagingSenderId: "1085363766562"
     }
 };

@@ -12,13 +12,13 @@ import { AllResourcesComponent } from './all-resources/all-resources.component'
 
 
 const routes: Routes = [
-    { path: 'resources', component: ResourcesComponent, canActivate: [AuthGuard] },
     { path: 'allresources', component: AllResourcesComponent, canActivate: [AuthGuard] },
+    { path: 'resources', component: ResourcesComponent, canActivate: [AuthGuard] },
     { path: 'welcome', component: MyCalendarComponent, canActivate: [AuthGuard] },
     { path: 'ragister', component: AppointmentListComponent, canActivate: [AuthGuard] },
     { path: 'charts', component: ChartsComponent, canActivate: [AuthGuard] },
     { path: 'login', component: LoginPageComponent },    
-    { path: '', redirectTo: 'resources', pathMatch: 'full', canActivate: [AuthGuard] }
+    { path: '', redirectTo: 'allresources', pathMatch: 'full', canActivate: [AuthGuard] }
 
 ];
 

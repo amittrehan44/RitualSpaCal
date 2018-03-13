@@ -1,6 +1,7 @@
 {
   "projects": {
     "ritualspadev": "ritualspadev",
-    "default": "ritualspadev"
+    "default": "ritualspadev",
+    "ritualspaprod": "ritualspaprod"
   }
 }

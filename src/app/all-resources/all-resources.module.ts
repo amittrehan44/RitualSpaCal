@@ -5,6 +5,10 @@ import { CalUtilsModule } from './../cal-utils/cal-utils.module';
 import { CalendarModule } from 'angular-calendar';
 import { ResizableModule } from 'angular-resizable-element';
 import { DragAndDropModule } from 'angular-draggable-droppable';
+import { DayNotesComponent } from './day-notes/day-notes.component';
+import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
+import { CalEventsService } from '../cal-events.service';
 //import { DemoComponent, MyDayViewComponent } from './component';
 
 @NgModule({
@@ -14,9 +18,11 @@ import { DragAndDropModule } from 'angular-draggable-droppable';
       CalendarModule,
       ResizableModule,
       DragAndDropModule,
-      CalUtilsModule
+      CalUtilsModule,
+      BrowserModule,
+        FormsModule 
   ],
-    declarations: [AllResourcesComponent, MyDayViewComponent],
+    declarations: [AllResourcesComponent, MyDayViewComponent, DayNotesComponent],
     exports: [
         AllResourcesComponent
     ]

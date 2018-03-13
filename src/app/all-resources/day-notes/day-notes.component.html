@@ -1,0 +1,16 @@
+<form #dayNotesForm="ngForm" (ngSubmit)="onSubmit(dayNotesForm)" >
+    <input type="hidden" name="$key" #$key="ngModel"  [(ngModel)]="_caleventService.selectedNote.$key">
+    <input type="hidden" name="day" #day="ngModel" [(ngModel)]="viewDate">
+    <div class="row container col-md-12">
+            <div class="form-group col-md-12">
+                <label>Notes: {{ viewDate | date }}</label>
+                <textarea class="form-control" name="notes" [(ngModel)]="this._caleventService.selectedNote.notes" placeholder="Notes" ></textarea>
+            </div>
+        </div>
+        <div class="form-group col-md-12">
+            <button type="submit" class="btn btn-default" [disabled]="!dayNotesForm.valid" >
+                <i class="fa fa-floppy-o"></i> Submit
+            </button>
+        </div>
+
+</form>

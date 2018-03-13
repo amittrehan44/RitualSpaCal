@@ -1,7 +1,7 @@
 //import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { environment } from './../environments/environment';
 import { BrowserModule } from '@angular/platform-browser';
-//import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 //import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
@@ -20,6 +20,10 @@ import { CoreModule } from './core/core.module';
 import { LoginPageComponent } from './login-page/login-page.component';
 import { AuthGuard } from './core/auth.guard';
 import { AllResourcesModule } from './all-resources/all-resources.module';
+import { CalEventsService } from './cal-events.service';
+import { CalendarEventTitleFormatter } from 'angular-calendar';
+import { CustomEventTitleFormatter } from './custom-event-title-formatter.service';
+import { ToastrModule } from 'ngx-toastr';
 
 
 
@@ -43,9 +47,15 @@ import { AllResourcesModule } from './all-resources/all-resources.module';
       MyCalendarModule,
       AppRoutingModule,
       CoreModule,
-      AllResourcesModule
+      AllResourcesModule,
+      BrowserAnimationsModule, // required animations module
+      ToastrModule.forRoot(), // ToastrModule added
   ],
-  providers: [AuthGuard],
+  providers: [AuthGuard,CalEventsService,
+    {
+        provide: CalendarEventTitleFormatter,
+        useClass: CustomEventTitleFormatter
+    }],
   exports: [AppComponent
             
             ],

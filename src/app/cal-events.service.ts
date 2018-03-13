@@ -31,6 +31,8 @@ import { eventsAPI } from './app.component';
 
 import { Services } from './cal-utils/services.model';
 
+import { DayNotes } from './all-resources/dayNotes.model';
+
 const colors: any = {
     red: {
         primary: '#ad2121',
@@ -49,8 +51,7 @@ const colors: any = {
 
 @Injectable()
 export class CalEventsService {
-    private _eventUrl = './assets/api/events.json';
-    private _productUrl = './assets/api/products.json';
+    
 
     appointmentList: AngularFireList<any>;
     selectedAppointment: eventsAPI;
@@ -81,6 +82,16 @@ export class CalEventsService {
     serviceList: AngularFireList<any>;
     optionsMultiselect: number[];
 
+
+    //vaiables for DayNotes
+    dayNotes: AngularFireList<any>;
+    //dayNote: DayNotes;
+    selectedNote: DayNotes = {
+        $key: "s",
+        day: new Date(), 
+        notes: "d"
+    };
+
     constructor(private _http: HttpClient, private firebase: AngularFireDatabase) { }
 
     /* getting data from firebase*/
@@ -97,6 +108,12 @@ export class CalEventsService {
         return this.serviceList;
     }
 
+    // getting DayNotes from FireBase
+    getFirebaseDayNotesData() {
+        this.dayNotes = this.firebase.list('dayNotes');       
+       return this.dayNotes;
+   }
+
      /* below function to insert data from firebase is not working  */
     insertAppointment(appointment: eventsAPI) {
         //this.e164 = "+1" + appointment.phone.substring(4, 7) + appointment.phone.substring(9, 12) + appointment.phone.substring(13, 17);
@@ -106,7 +123,7 @@ export class CalEventsService {
             
             name: appointment.name,
             phone: appointment.phone,
-            //service: appointment.service,
+            landline: appointment.landline,
             service: this.selectService,
             gender: appointment.gender,
             stylist_title: appointment.stylist_title,
@@ -120,12 +137,19 @@ export class CalEventsService {
         console.log("inside insertAppointment Start:" + appointment.start.toString());
     }
 
+    insertDayNote(dayNote: DayNotes) {
+        this.dayNotes.push({
+            day: dayNote.day.toString(),
+            notes: dayNote.notes
+        })
+    }
+
     updateAppointment(appointment: eventsAPI) {
         //this.e164 = "+1" + appointment.phone.substring(4, 7) + appointment.phone.substring(9, 12) + appointment.phone.substring(13, 17);
         this.appointmentList.update(appointment.$key, {
             name: appointment.name,
             phone: appointment.phone,
-            //service: appointment.service,
+            landline: appointment.landline,
             service: this.selectService,
             gender: appointment.gender,
             stylist_title: appointment.stylist_title,
@@ -135,6 +159,17 @@ export class CalEventsService {
             notes: appointment.notes,
             chair: appointment.chair
         })
+    }
+
+    updateDayNotes(dayNote: DayNotes) {
+        //this.e164 = "+1" + appointment.phone.substring(4, 7) + appointment.phone.substring(9, 12) + appointment.phone.substring(13, 17);
+        this.dayNotes.update(dayNote.$key, {
+            day: dayNote.day.toString(),
+            notes: dayNote.notes
+           
+        })
+        if(dayNote.notes=='')
+        this.dayNotes.remove(dayNote.$key);
     }
    
 /* 
@@ -199,7 +234,9 @@ No need of even below function as now we are using firebase instead of _eventURL
   */
 
 
-    
+ deleteDayNote(key: string) {
+    this.dayNotes.remove(key);
+}
 
     deleteAppointment(key: string) {
         this.appointmentList.remove(key);

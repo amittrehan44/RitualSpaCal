@@ -1,30 +1,36 @@
 <form #appointmentForm="ngForm" (ngSubmit)="onSubmit(appointmentForm)">
     <input type="hidden" name="$key" #$key="ngModel" [(ngModel)]="_caleventService.selectedAppointment.$key">
     
-    <div class="form-group col-md-12">
-        <label>Chair/Room:</label><br />
 
-        <!--<select name="email" #email="ngModel" [(ngModel)]="_caleventService.selectedAppointment.email">
-            <option value="">
-            <option value="TX R1">TX R1
-            <option value="TX R2">TX R2
-            <option value="Mani 2">Mani 2
-        </select><br />-->
+    <div class="row container col-md-12">
+        <div class="form-group col-md-6">
+            <label>Chair/Room:</label><br />
 
-
-        <input type="radio" name="chair" #email="ngModel" value="TX Room1" [(ngModel)]="_caleventService.selectedAppointment.chair"> TX R1
-        <input type="radio" name="chair" #email="ngModel" value="Manicure 1" [(ngModel)]="_caleventService.selectedAppointment.chair"> Mani 1
-        <input type="radio" name="chair" #email="ngModel" value="Pedicure 1" [(ngModel)]="_caleventService.selectedAppointment.chair"> Pedi 1
-        <input type="radio" name="chair" #email="ngModel" value="Pedicure 3" [(ngModel)]="_caleventService.selectedAppointment.chair"> Pedi 3
-        <br />
-        <input type="radio" name="chair" #email="ngModel" value="TX Room2" [(ngModel)]="_caleventService.selectedAppointment.chair"> TX R2
-        <input type="radio" name="chair" #email="ngModel" value="Manicure 2" [(ngModel)]="_caleventService.selectedAppointment.chair"> Mani 2
-        <input type="radio" name="chair" #email="ngModel" value="Pedicure 2" [(ngModel)]="_caleventService.selectedAppointment.chair"> Pedi 2
-        <input type="radio" name="chair" #email="ngModel" value="Threading" [(ngModel)]="_caleventService.selectedAppointment.chair"> Threading
-        
-        
+            <!--<select name="email" #email="ngModel" [(ngModel)]="_caleventService.selectedAppointment.email">
+                <option value="">
+                <option value="TX R1">TX R1
+                <option value="TX R2">TX R2
+                <option value="Mani 2">Mani 2
+            </select><br />-->
 
 
+            <input type="radio" name="chair" #email="ngModel" value="TX Room1" [(ngModel)]="_caleventService.selectedAppointment.chair" required> TX R1
+            <input type="radio" name="chair" #email="ngModel" value="Manicure 1" [(ngModel)]="_caleventService.selectedAppointment.chair"> Mani 1
+            <input type="radio" name="chair" #email="ngModel" value="Pedicure 1" [(ngModel)]="_caleventService.selectedAppointment.chair"> Pedi 1
+            <input type="radio" name="chair" #email="ngModel" value="Pedicure 3" [(ngModel)]="_caleventService.selectedAppointment.chair"> Pedi 3
+            <br />
+            <input type="radio" name="chair" #email="ngModel" value="TX Room2" [(ngModel)]="_caleventService.selectedAppointment.chair"> TX R2
+            <input type="radio" name="chair" #email="ngModel" value="Manicure 2" [(ngModel)]="_caleventService.selectedAppointment.chair"> Mani 2
+            <input type="radio" name="chair" #email="ngModel" value="Pedicure 2" [(ngModel)]="_caleventService.selectedAppointment.chair"> Pedi 2
+            <input type="radio" name="chair" #email="ngModel" value="Threading" [(ngModel)]="_caleventService.selectedAppointment.chair"> Threading
+
+        </div>
+
+        <div class="form-group col-md-6">
+                <label>Cell Phone(SMS)</label>
+                <input class="form-control" placeholder="+1 (xxx) xxx-xxxx" [textMask]="{mask: mask}" name="phone" #phone="ngModel" [(ngModel)]="_caleventService.selectedAppointment.phone" pattern="\+\d\d{10}"/>
+                
+        </div>
     </div>
     
     <div class="row container col-md-12">
@@ -33,13 +39,14 @@
             <input class="form-control" name="name" #name="ngModel" [(ngModel)]="_caleventService.selectedAppointment.name" placeholder="Full Name" required>
         </div>
         <div class="form-group col-md-6">
-            <label>Phone</label>
-            <input class="form-control" placeholder="+1 (xxx) xxx-xxxx" [textMask]="{mask: mask}" name="phone" #phone="ngModel" [(ngModel)]="_caleventService.selectedAppointment.phone" pattern="\+\d\d{10}"/>
+            <label>Landline</label>
+            <input class="form-control" placeholder="+1 (xxx) xxx-xxxx" [textMask]="{mask: mask}" name="landline" #phone="ngModel" [(ngModel)]="_caleventService.selectedAppointment.landline" pattern="\+\d\d{10}"/>
             
         </div>
     </div>
 
   
+
         
 
 

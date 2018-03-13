@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, Output, EventEmitter, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Output, EventEmitter, ViewChild, TemplateRef, OnChanges } from '@angular/core';
 import { CalendarEvent, CalendarUtils, CalendarDayViewComponent } from 'angular-calendar';
 
 import { Subject } from 'rxjs/Subject';
@@ -27,6 +27,7 @@ import { AuthService } from './../core/auth.service';
 import { eventsAPI } from './../app.component';
 import { Services } from './../cal-utils/services.model';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { DayNotes } from './dayNotes.model';
 
 
 const EVENT_WIDTH = 130;
@@ -153,6 +154,7 @@ export class MyCalendarUtils extends CalendarUtils {
 export class MyDayViewComponent extends CalendarDayViewComponent {
 
     @Output() userChanged = new EventEmitter();
+    //@Output() notesChanged = new EventEmitter<String>();
 
     eventDragged1(dayEvent: DayViewEvent, xPixels: number, yPixels: number): void {
         if (yPixels !== 0) {
@@ -232,7 +234,7 @@ export const colors: any = {
 
 @Component({
     selector: 'app-all-resources',
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.Default, 
   templateUrl: './all-resources.component.html',
     styleUrls: ['./all-resources.component.css'],
     providers: [{
@@ -240,9 +242,18 @@ export const colors: any = {
         useClass: MyCalendarUtils
     }]
 })
-export class AllResourcesComponent implements OnInit {
+export class AllResourcesComponent implements OnInit, OnChanges  {
     view: string = 'day';
-    viewDate: Date = new Date();
+   _viewDate: Date = new Date();
+    get viewDate(): Date {
+        return this._viewDate
+    }
+   set viewDate(val: Date) {
+    this._viewDate = val;
+    //this.getCurrentNotes(val);
+  }
+
+  
     refresh: Subject<any> = new Subject();
 
     @ViewChild('modalContent') modalContent: TemplateRef<any>;
@@ -260,6 +271,7 @@ export class AllResourcesComponent implements OnInit {
 
 
     activeDayIsOpen: boolean = true;
+   
     durationMins: number;
     durationHrs: string;
     _tempMins: number;
@@ -268,7 +280,7 @@ export class AllResourcesComponent implements OnInit {
 
 
     /*   events: CalendarEvent[] = []; */
-    events: Array<CalendarEvent<{ $key: string; name: string, phone: string, service: string, gender: string, stylist_title: string, notes: string, chair: any, serviceOptionIds: number[], type: string }>> = []
+    events: Array<CalendarEvent<{ $key: string; name: string, phone: string, landline: string, service: string, gender: string, stylist_title: string, notes: string, chair: any, serviceOptionIds: number[], type: string }>> = []
 
 
     eventColor: any;
@@ -284,7 +296,14 @@ export class AllResourcesComponent implements OnInit {
 
     createModalRef: NgbModalRef;
 
-    constructor(public _caleventService: CalEventsService, public auth: AuthService, public modal: NgbModal) { }
+    //Day notes vaiables
+    allDayNotes: DayNotes[];
+    monthNames: any = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+        ];
+    todaysNotes: String;
+    selectedNote: DayNotes;
+
+    constructor(public _caleventService: CalEventsService, public auth: AuthService, public modal: NgbModal) {  }
 
     ngOnInit() {
 
@@ -297,7 +316,7 @@ export class AllResourcesComponent implements OnInit {
                 var y = element.payload.toJSON();
                 y["$key"] = element.key;
                 this.filteredEvents.push(y as eventsAPI);
-
+                
             });
             console.log(this.filteredEvents);
             this.sortByDate();
@@ -306,6 +325,51 @@ export class AllResourcesComponent implements OnInit {
             //            this.loadevents();
 
         });
+
+
+        //get all day notes
+        var z = this._caleventService.getFirebaseDayNotesData();
+        // z.snapshotChanges().subscribe(item => {
+        //     this.allDayNotes = [];
+            
+        //     item.forEach(element => {
+        //         var n = element.payload.toJSON();
+        //         n["$key"] = element.key;
+        //         this.allDayNotes.push(n as DayNotes);
+
+        //     });
+        //     console.log(this.allDayNotes);
+
+        // });
+
+        z.snapshotChanges().subscribe(item => {
+            this.allDayNotes = [];
+            this.todaysNotes = "";
+            this.selectedNote = null;
+            item.forEach(element => {
+                var y = element.payload.toJSON();
+                y["$key"] = element.key;
+                this.allDayNotes.push(y as DayNotes);
+
+                var dummy = y["day"];
+                 /* for double digits date (10-31) */
+                 if (dummy.substring(8, 10) == this.viewDate.getDate().toString() && dummy.substring(4, 7) == this.monthNames[this.viewDate.getMonth()] && dummy.substring(11, 15) == this.viewDate.getFullYear().toString()) {
+                    this.todaysNotes = y["notes"];
+                    this.selectedNote = y as DayNotes;
+
+                }
+                /* for date with single digits (1-9) */
+                else if (dummy.substring(9, 10) == this.viewDate.getDate().toString() && dummy.substring(4, 7) == this.monthNames[this.viewDate.getMonth()] && dummy.substring(11, 15) == this.viewDate.getFullYear().toString()) {
+                    this.todaysNotes = y["notes"];
+                    this.selectedNote = y as DayNotes;
+                }
+            });
+            console.log(this.allDayNotes);
+            console.log(this.todaysNotes);
+            console.log(this.selectedNote);
+            console.log(this._caleventService.selectedNote);
+        });
+
     }
 
 
@@ -341,6 +405,7 @@ export class AllResourcesComponent implements OnInit {
             $key: event.meta.$key,
             name: event.meta.name,
             phone: event.meta.phone,
+            landline: event.meta.landline,
             service: event.meta.service,
             start: event.start,
             end: event.end,
@@ -518,6 +583,7 @@ export class AllResourcesComponent implements OnInit {
                         $key: this.filteredEvents[i].$key,
                         name: this.filteredEvents[i].name,
                         phone: this.filteredEvents[i].phone,
+                        landline:  this.filteredEvents[i].landline,
                         service: this.eventServiceJoin1[i],
                         gender: this.filteredEvents[i].gender,
                         stylist_title: this.filteredEvents[i].stylist_title,
@@ -623,7 +689,66 @@ export class AllResourcesComponent implements OnInit {
         event.meta.chair = newUser;
         this.refresh.next();
     }
+    ngOnChanges(changes) {
+        //this.getCurrentNotes()
+      }
 
-  
+  //get selected date note notes
+
+  getCurrentNotes(val: Date){
+
+    //I was trying to fetch data directly from firebase then thought to do locally with selectedNote 
+    // var z = this._caleventService.getFirebaseDayNotesData();
+    // z.snapshotChanges().subscribe(item => {
+      
+    //     this.todaysNotes = "not found";
+    //     this.selectedNote =null;
+    //     item.forEach(element => {
+    //         var y = element.payload.toJSON();
+    //         y["$key"] = element.key;
+    //         console.log(y); 
+    //         var dummy = y["day"];
+    //          /* for double digits date (10-31) */
+    //          if (dummy.substring(8, 10) == val.getDate().toString() && dummy.substring(4, 7) == this.monthNames[val.getMonth()] && dummy.substring(11, 15) == val.getFullYear().toString()) {
+    //             this.todaysNotes = y["notes"];
+    //             this.selectedNote = y as DayNotes;
+
+    //         }
+    //         /* for date with single digits (1-9) */
+    //         else if (dummy.substring(9, 10) == val.getDate().toString() && dummy.substring(4, 7) == this.monthNames[val.getMonth()] && dummy.substring(11, 15) == val.getFullYear().toString()) {
+    //             this.todaysNotes = y["notes"];
+    //             this.selectedNote = y as DayNotes;
+    //         }
+            
+    //     });
+        
+    //     console.log(this.viewDate);
+    //     console.log(this.todaysNotes);
+    //     console.log(this.selectedNote);
+        
+    // });
+
+    this.todaysNotes = "";
+    this.selectedNote =null;
+    for (var i: number = 0; i < this.allDayNotes.length; i++) {
+       
+         /* for double digits date (10-31) */
+         if (this.allDayNotes[i].day.toString().substring(8, 10) == val.getDate().toString() && this.allDayNotes[i].day.toString().substring(4, 7) == this.monthNames[val.getMonth()] && this.allDayNotes[i].day.toString().substring(11, 15) == val.getFullYear().toString()) {
+            this.todaysNotes = this.allDayNotes[i].notes;
+            this.selectedNote = this.allDayNotes[i];
+
+        }
+         /* for date with single digits (1-9) */
+         else if (this.allDayNotes[i].day.toString().substring(9, 10) == val.getDate().toString() && this.allDayNotes[i].day.toString().substring(4, 7) == this.monthNames[val.getMonth()] && this.allDayNotes[i].day.toString().substring(11, 15) == val.getFullYear().toString()) {
+            this.todaysNotes = this.allDayNotes[i].notes;
+            this.selectedNote = this.allDayNotes[i];
+        }
+    }
+    
+        console.log(this.todaysNotes);
+        console.log(this.selectedNote);
+
+  }
+
 
 }

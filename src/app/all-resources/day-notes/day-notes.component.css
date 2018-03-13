@@ -1,0 +1,12 @@
+input.ng-invalid.ng-dirty{
+    border: 1px solid red;
+}
+
+textarea {
+    
+    height: 200px;
+  }
+
+button:hover,ul.list-group.hover li:hover{
+    cursor: pointer;
+   }

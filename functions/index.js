@@ -79,7 +79,7 @@ exports.textStatus = functions.database
                            }
                            const textMessage = {
                                //body: `Hello ${name}, you have an Appointment on ${start} - Saddhers`,
-                               body: `You have an Appointment on ${start} - Ritual Spa. If you need to reschedule please call (604) 381-3860`,
+                               body: `You have booked an appointment on ${start} - Ritual Spa. If you need to reschedule please call (604) 381-3860`,
                                //to: +17787792744,
                                to: phoneNumber,  // Text to this number
                                from: twilioNumber // From a valid Twilio number
@@ -124,7 +124,7 @@ exports.dailySMSReminder = functions.https.onRequest((req, res) => {
 
     //Add number of hours to the point when client wants to send reminders
     // Example if at 6PM then and 6 or more hours to current date to make it next day
-    currentDate.setHours(currentDate.getHours() + 7)
+    currentDate.setHours(currentDate.getHours() + 13)
     const getDate = currentDate.toDateString();
 
     const names = []
@@ -155,9 +155,9 @@ exports.dailySMSReminder = functions.https.onRequest((req, res) => {
                     from: twilioNumber // From a valid Twilio number
                 }
                 console.log('Sending messge to' + name + 'on phone number' + phoneNumber1 + 'on ' + start)
-               /*  client.messages.create(textMessage).then(message => console.log(message.sid, 'success'))
+                 client.messages.create(textMessage).then(message => console.log(message.sid, 'success'))
                                                           .catch(err => console.log(err))
-                */
+                
             }
         })
     }).then(() => {

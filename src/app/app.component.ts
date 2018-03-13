@@ -59,7 +59,7 @@ export class eventsAPI {
     $key: string;
     name: string;
     phone: string;
-    //service: string;
+    landline: string;
     service: any[];
     start: Date;
     end: Date;

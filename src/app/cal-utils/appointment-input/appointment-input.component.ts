@@ -19,6 +19,8 @@ import {
 import { IMultiSelectOption } from 'angular-2-dropdown-multiselect';
 
 import { Services } from './../services.model';
+import { ToastrService } from 'ngx-toastr';
+
 
 
 
@@ -39,13 +41,14 @@ export class AppointmentInputComponent implements OnInit {
     mask: any[] = ['+', '1', /[1-9]/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/];
     mask1: any[] = [/[0-9]/, ':', /[0-5]/, /[0-9]/];
     mask2: any[] = [/^[0-9]+(\.[0-9]{1,2})?$/];
+    mask3: any[] = ['+', '1', /[1-9]/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/];
 
     //Variables for multiselect services
     optionsModel: number[] = [];
     myServiceOptions: IMultiSelectOption[];
     selectedService: Services[];
 
-    constructor(public _caleventService: CalEventsService, public modal: NgbModal) { }
+    constructor(public _caleventService: CalEventsService, public modal: NgbModal, private tostr: ToastrService) { }
 
     ngOnInit() {
         
@@ -117,7 +120,7 @@ export class AppointmentInputComponent implements OnInit {
             $key: null,
             name: '',
             phone: '',
-            //service: '',
+            landline: '',
             service: [],
             start: new Date(),
             end: new Date(),
@@ -153,7 +156,7 @@ export class AppointmentInputComponent implements OnInit {
         if (this.modalRef != null)
             this.modalRef.close();
 
-       
+            this.tostr.success('Submitted Succcessfully', 'Appointment');
         
     }
 
@@ -165,6 +168,8 @@ export class AppointmentInputComponent implements OnInit {
             if (this.modalRef != null)
                 this.modalRef.close();
         }
+
+        this.tostr.warning("Deleted Successfully", "Appointment");
     }
 
     setStartData() {

@@ -99,7 +99,7 @@ export class MyCalendarComponent implements OnInit {
     refresh: Subject<any> = new Subject();
 
     /*   events: CalendarEvent[] = []; */
-    events: Array<CalendarEvent<{ $key: string; name: string, phone: string, service: string, gender: string, stylist_title: string, notes: string, chair: string, serviceOptionIds: number[], type: string }>> = []
+    events: Array<CalendarEvent<{ $key: string; name: string, phone: string, landline: string, service: string, gender: string, stylist_title: string, notes: string, chair: string, serviceOptionIds: number[], type: string }>> = []
 
     filteredEvents: eventsAPI[];
 
@@ -199,6 +199,7 @@ export class MyCalendarComponent implements OnInit {
             $key: event.meta.$key,
             name: event.meta.name,
             phone: event.meta.phone,
+            landline: event.meta.landline,
             service: event.meta.service,
             start: event.start,
             end: event.end,
@@ -382,6 +383,7 @@ export class MyCalendarComponent implements OnInit {
                         $key: this.filteredEvents[i].$key,
                         name: this.filteredEvents[i].name,
                         phone: this.filteredEvents[i].phone,
+                        landline:  this.filteredEvents[i].landline,
                         service: this.eventServiceJoin1[i],
                         gender: this.filteredEvents[i].gender,
                         stylist_title: this.filteredEvents[i].stylist_title,

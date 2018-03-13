@@ -35,17 +35,18 @@ import { CustomEventTitleFormatter } from './../custom-event-title-formatter.ser
       CalendarModule.forRoot(),
       CalUtilsModule,
       CalendarModule,
-      AppRoutingModule
+      AppRoutingModule,
+
   ],
     declarations: [MyCalendarComponent],
     exports: [MyCalendarComponent, ResourcesComponent
 
     ],
-    providers: [CalEventsService,
-        {
-            provide: CalendarEventTitleFormatter,
-            useClass: CustomEventTitleFormatter
-        }
-    ]
+    // providers: [CalEventsService,
+    //     {
+    //         provide: CalendarEventTitleFormatter,
+    //         useClass: CustomEventTitleFormatter
+    //     }
+    // ]
 })
 export class MyCalendarModule { }

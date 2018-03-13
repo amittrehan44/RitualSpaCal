@@ -5,7 +5,7 @@
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="">
-        <a class="navbar-brand mx-auto" [routerLink]="['/welcome']" routerLinkActive="active">Appointment Organiser</a>
+        <a class="navbar-brand mx-auto" [routerLink]="['/allresources']" routerLinkActive="active">Appointment Organiser</a>
     </div>
 
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
@@ -42,7 +42,10 @@
         -->
         <ul class="nav navbar-nav ml-auto">
             <li class="nav-item active">
-                <a class="nav-link" [routerLink]="['/welcome']" routerLinkActive="active">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" [routerLink]="['/allresources']" routerLinkActive="active">Resources <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" [routerLink]="['/welcome']" routerLinkActive="active">Calendar <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item active">
                 <a class="nav-link" [routerLink]="['/ragister']" routerLinkActive="active">Register <span class="sr-only">(current)</span></a>
@@ -52,13 +55,11 @@
                 <a class="nav-link" [routerLink]="['/charts']" routerLinkActive="active">Charts <span class="sr-only">(current)</span></a>
             </li>
 -->
-            <li class="nav-item active">
+            <!-- <li class="nav-item active">
                 <a class="nav-link" [routerLink]="['/resources']" routerLinkActive="active">Resources <span class="sr-only">(current)</span></a>
-            </li>
+            </li> -->
 
-            <li class="nav-item active">
-                <a class="nav-link" [routerLink]="['/allresources']" routerLinkActive="active">All-Resources <span class="sr-only">(current)</span></a>
-            </li>
+           
             <li class="nav-item active"><a class="nav-link" (click)="auth.signOut()">Logout</a></li>
         </ul>
     </div>

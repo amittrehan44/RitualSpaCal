@@ -15,7 +15,7 @@ export class CalContextmenuComponent  {
     ];
  @Output() notify: EventEmitter<string> = new EventEmitter<string>();
 
-    @ViewChild(ContextMenuComponent) public basicMenu: ContextMenuComponent;
+   @ViewChild(ContextMenuComponent) public basicMenu: ContextMenuComponent;
 
     constructor(private contextMenuService: ContextMenuService) { }
 

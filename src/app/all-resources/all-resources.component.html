@@ -47,6 +47,31 @@
 </ng-template>
 
 <!--/Update Appointment Modal Ends-->
+
+<!--Create DayNotes Modal Starts-->
+
+<div class="col-sm-12 space"></div>
+
+<ng-template #modalDayNotesForm let-close="close">
+    <div class="modal-header">
+        <h5 class="modal-title">Add/Update Day Notes</h5>
+        <button type="button" class="close" (click)="close()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+           
+           <app-day-notes [createModalRef]="createModalRef" [viewDate]="viewDate" [selectedNote]="selectedNote"></app-day-notes>
+            
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" (click)="close()">Close</button>
+    </div>
+</ng-template>
+
+<!--/Create DayNotes Modal Ends-->
+
+
 <!--Context Menu Starts-->
 <context-menu #basicMenu>
     <!--    <ng-template contextMenuItem (execute)="addEvent($event.item)"> -->
@@ -68,40 +93,57 @@
 </ng-template>
 
 <!--Calander Header Starts with Next and Previous-->
-<div class="row text-center" style="margin-bottom: 10px;">
-    <div class="col-md-12">
-        <div class="btn-group">
-            <div class="btn btn-primary"
-                 mwlCalendarPreviousView
-                 [view]="view"
-                 [(viewDate)]="viewDate"
-                 (viewDateChange)="activeDayIsOpen = false">
-                Previous
+<div class="row text-center">
+    <div class="col-md-4">
+        <div class="row text-center" style="margin-bottom: 10px;">
+            <div class="col-md-12">
+                <div class="btn-group">
+                    <div class="btn btn-primary"
+                        mwlCalendarPreviousView
+                        [view]="view"
+                        [(viewDate)]="viewDate"
+                        (viewDateChange)="activeDayIsOpen = false; getCurrentNotes($event)">
+                        Previous
+                    </div>
+                    <div class="btn btn-outline-secondary"
+                        mwlCalendarToday
+                        [(viewDate)]="viewDate"
+                        (viewDateChange)="getCurrentNotes($event)">
+                        Today
+                    </div>
+                    <div class="btn btn-primary"
+                        mwlCalendarNextView
+                        [view]="view"
+                        [(viewDate)]="viewDate"
+                        (viewDateChange)="activeDayIsOpen = false; getCurrentNotes($event)">
+                        Next
+                    </div>
+                </div>
             </div>
-            <div class="btn btn-outline-secondary"
-                 mwlCalendarToday
-                 [(viewDate)]="viewDate">
-                Today
+            <div class="col-md-12">
+                <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
+                <div class="wrapper">
+                    <button class="btn btn-primary" (click)="open(modalAppointmentForm)">Add Appointment</button>
+                </div>
             </div>
-            <div class="btn btn-primary"
-                 mwlCalendarNextView
-                 [view]="view"
-                 [(viewDate)]="viewDate"
-                 (viewDateChange)="activeDayIsOpen = false">
-                Next
-            </div>
-        </div>
-    </div>
-    <div class="col-md-12">
-        <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
-        <div class="wrapper">
-            <button class="btn btn-primary" (click)="open(modalAppointmentForm)">Add Appointment</button>
+
         </div>
     </div>
 
+    <div class="col-md-8">
+        <div class="form-group col-md-12">
+            
+            <div class="alert alert-info" style="text-align:left" >
+                    <!-- <strong>{{viewDate}} </strong><br> -->
+                    <strong> {{todaysNotes}} </strong>
+                    <!-- <input [(ngModel)]="todaysNotes"> -->
+            </div>
+            <button class="btn btn-primary" (click)="open(modalDayNotesForm)">Add Notes</button>
+            <!--  -->
+        </div>
+
+    </div>
 </div>
-
-
 
 <my-calendar-day-view [viewDate]="viewDate"
                       [events]="events"
