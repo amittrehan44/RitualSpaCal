@@ -75,7 +75,7 @@
 <!--Context Menu Starts-->
 <context-menu #basicMenu>
     <!--    <ng-template contextMenuItem (execute)="addEvent($event.item)"> -->
-    <ng-template contextMenuItem (execute)="open(modalAppointmentForm); _caleventService.contextDate = $event.item; _caleventService.contextResource = 'Mani 2' ">
+    <ng-template contextMenuItem (execute)="open(modalAppointmentForm); _caleventService.contextDate = $event.item;  ">
         Add Appointment
     </ng-template>
 </context-menu>
@@ -147,7 +147,7 @@
 
 <my-calendar-day-view [viewDate]="viewDate"
                       [events]="events"
-                      [eventWidth]="130"
+                      [eventWidth]="120"
                       [refresh]="refresh"
                       (userChanged)="userChanged($event)"
                       (eventClicked)="handleEvent('Clicked',  $event.event)"

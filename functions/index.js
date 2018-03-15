@@ -61,6 +61,37 @@ exports.helloworld = functions.database
     })
 */
 
+//Send SMS on create of start time or create of new appointment
+exports.createAppointment = functions.database
+       .ref('/appointments/{key}/start')
+       .onCreate(event => {
+           const orderKey = event.params.key
+           return admin.database()
+                       .ref(`/appointments/${orderKey}`)
+                       .once('value')
+                       .then(snapshot => snapshot.val())
+                       .then(appointment => {
+                           const name = appointment.name
+                           const start = DisplayCurrentTime(appointment.start)
+                           const phoneNumber = appointment.phone
+                           if (!validE164(phoneNumber)) {
+                               throw new Error('number must be E164 format!')
+                           }
+                           const textMessage = {
+                               //body: `Hello ${name}, you have an Appointment on ${start} - Saddhers`,
+                               body: `You have booked an appointment on ${start} - Ritual Spa. If you need to reschedule please call (604) 381-3860`,
+                               //to: +17787792744,
+                               to: phoneNumber,  // Text to this number
+                               from: twilioNumber // From a valid Twilio number
+                           }
+                           console.log('Sending messge to' + name + 'on phone number' + phoneNumber + 'on ' + start )
+                            return client.messages.create(textMessage).then(message => console.log(message.sid, 'success'))
+                                                                     .catch(err => console.log(err))
+                          
+                       })
+                       
+       });
+
 //send sms on update start time
 exports.textStatus = functions.database
        .ref('/appointments/{key}/start')
@@ -120,7 +151,9 @@ const ref = admin.database().ref()
 exports.dailySMSReminder = functions.https.onRequest((req, res) => {
     var currentDate = new Date()
     // change time in PST
-    currentDate.setHours(currentDate.getHours() - 8)
+    //Daylight Saving Changes
+	////for PST nov to march - 8 and for PDT mar to nov -7
+    currentDate.setHours(currentDate.getHours() - 7)
 
     //Add number of hours to the point when client wants to send reminders
     // Example if at 6PM then and 6 or more hours to current date to make it next day
@@ -135,7 +168,10 @@ exports.dailySMSReminder = functions.https.onRequest((req, res) => {
             const name = childSnap.val().name
             const start1 = childSnap.val().start
             var date = new Date(start1)
-            date.setHours(date.getHours() - 8)
+            // change time in PST
+			//Daylight Saving Changes
+			////for PST nov to march - 8 and for PDT mar to nov -7
+            date.setHours(date.getHours() - 7)
             const getStartDate = date.toDateString()
 
             const start = DisplayCurrentTime(childSnap.val().start)
@@ -180,7 +216,9 @@ function validE164(num) {
 //return date and time
 function DisplayCurrentTime(date1) {
     var date = new Date(date1);
-    date.setHours(date.getHours() - 8);
+    //Daylight Saving Changes
+	////for PST nov to march - 8 and for PDT mar to nov -7
+    date.setHours(date.getHours() - 7);
     var getDate = date.toDateString();
     var hours = date.getHours() > 12 ? date.getHours() - 12 : date.getHours();
     var am_pm = date.getHours() >= 12 ? "PM" : "AM";

@@ -30,7 +30,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { DayNotes } from './dayNotes.model';
 
 
-const EVENT_WIDTH = 130;
+const EVENT_WIDTH = 120;
 
 
 // extend the interface to add the array of users
@@ -82,7 +82,7 @@ export class MyCalendarUtils extends CalendarUtils {
       margin-left: 70px;
     }
     .day-view-column-header {
-      width: 130px;
+      width: 120px;
       border: solid 1px black;
       text-align: center;
        background-color: lightgrey;

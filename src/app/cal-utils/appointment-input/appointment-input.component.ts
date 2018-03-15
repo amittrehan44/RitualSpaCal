@@ -174,13 +174,13 @@ export class AppointmentInputComponent implements OnInit {
 
     setStartData() {
         //context date is returned from context basic menue 
-        if (this._caleventService.contextDate != null || this._caleventService.contextResource != null)
+        if (this._caleventService.contextDate != null )
             {
             this._caleventService.selectedAppointment.start = this._caleventService.contextDate;
             this._caleventService.selectedAppointment.end = this._caleventService.contextDate;
-            this._caleventService.selectedAppointment.chair = this._caleventService.contextResource;
+           // this._caleventService.selectedAppointment.chair = this._caleventService.contextResource;
             this._caleventService.contextDate = null
-            this._caleventService.contextResource = null;
+            //this._caleventService.contextResource = null;
         }
         
         if (this._caleventService.appointmentToUpdate != null) {
