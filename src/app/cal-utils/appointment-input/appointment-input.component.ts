@@ -62,20 +62,41 @@ export class AppointmentInputComponent implements OnInit {
 
         //for service multiselect
 
+        // this.myServiceOptions = [
+        //     { id: 1, name: 'Face Waxing' },
+        //     { id: 2, name: 'Threading' },
+        //     { id: 3, name: 'Body Waxing' },
+        //     { id: 4, name: 'Body Massage' },
+        //     { id: 5, name: 'Facial' },
+        //     { id: 6, name: 'Manicure' },
+        //     { id: 7, name: 'Pedicure' },
+        //     { id: 8, name: 'Make-Up App' },
+        //     { id: 9, name: 'AntiAging Treat' },
+        //     { id: 10, name: 'Body Treat' },
+        //     { id: 11, name: 'Skin Irregularities' },
+        //     { id: 12, name: 'Chemical Peels' },
+        //     { id: 13, name: 'Bust Firming' }
+        // ]; 
+
         this.myServiceOptions = [
-            { id: 1, name: 'Face Waxing' },
-            { id: 2, name: 'Threading' },
-            { id: 3, name: 'Body Waxing' },
-            { id: 4, name: 'Body Massage' },
-            { id: 5, name: 'Facial' },
-            { id: 6, name: 'Manicure' },
-            { id: 7, name: 'Pedicure' },
-            { id: 8, name: 'Make-Up App' },
-            { id: 9, name: 'AntiAging Treat' },
-            { id: 10, name: 'Body Treat' },
-            { id: 11, name: 'Skin Irregularities' },
-            { id: 12, name: 'Chemical Peels' },
-            { id: 13, name: 'Bust Firming' }
+            { id: 1, name: 'Facial' },
+            { id: 2, name: 'Facial-Anti-Aging' },
+            { id: 3, name: 'Chemical Peel' },
+            { id: 4, name: 'Manicure' },
+            { id: 5, name: 'Paris Manicure' },
+            { id: 6, name: 'Pedicure' },
+            { id: 7, name: 'Paris Pedicure' },
+            { id: 8, name: 'Gel Manicure' },
+            { id: 9, name: 'Gel Pedicure' },
+            { id: 10, name: 'Body Wax' },
+            { id: 11, name: '1/2 Hr Massage' },
+            { id: 12, name: '45 Min Massage' },
+            { id: 13, name: '1 Hr Full Body Massage' },
+            { id: 14, name: 'Microblading' },
+            { id: 15, name: 'Microblading - TouchUp' },
+            { id: 16, name: 'Lash Extension' },
+            { id: 17, name: 'Skin Tag Removal' },
+            { id: 18, name: 'Miscellaneous' }
         ]; 
 
 
@@ -97,7 +118,7 @@ export class AppointmentInputComponent implements OnInit {
     //for service multiselect
     onChange(a: any) {
         
-
+        var x = 0;
         this.selectedService = [];
         if (this.optionsModel != null) { 
         for (var i: number = 0; i < this.optionsModel.length; i++) {
@@ -106,10 +127,100 @@ export class AppointmentInputComponent implements OnInit {
                 name: this.myServiceOptions[this.optionsModel[i] - 1].name
 
             });
+            x = x + this.serviceTime(this.optionsModel[i]);  
         }
     }
-        console.log(this.selectedService);
-        this._caleventService.selectService = this.selectedService;
+    console.log(this.selectedService);
+    console.log(this.optionsModel);
+    console.log(x);
+    this.setDuration(x);
+    this._caleventService.selectService = this.selectedService;
+    }
+
+    serviceTime(id: number): number{
+        switch(id){
+            case 1:
+                return 60;
+            case 2:
+                return 90;
+            case 3:
+                return 40;
+            case 4:
+                return 30;
+            case 5:
+                return 40;
+            case 6:
+                return 45;
+            case 7:
+                return 50;
+            case 8:
+                return 40; 
+            case 9:
+                return 55;
+            case 10:
+                return 30;
+            case 11:
+                return 30;
+            case 12:
+                return 30;
+            case 13:
+                return 60;
+            case 14:
+                return 240;
+            case 15:
+                return 120;
+            case 16:
+                return 60;
+            case 17:
+                return 45;
+            case 18:
+                return 15;            
+        }
+
+        return 0;
+    }
+
+    setDuration(minutes: number){
+        var mins = minutes;
+        this._caleventService.durationString = '0:'+mins.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false});
+        if (minutes >= 60){
+        //    minutes =  minutes/60;
+        //    minutes.toFixed(2);
+        //    var d1 = minutes.toString
+        //     console.log(d1);
+        //     console.log(minutes.toFixed(2));
+            mins = mins - 60;
+            this._caleventService.durationString = '1:'+mins.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false});
+            if(minutes >= 120){
+                mins = minutes;
+                mins = mins - 120;
+                this._caleventService.durationString = '2:'+mins.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false});
+                if(minutes >= 180){
+                    mins = minutes;
+                    mins = mins - 180;
+                    this._caleventService.durationString = '3:'+mins.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false});
+
+                    if(minutes >= 240){
+                        mins = minutes;
+                        mins = mins - 240;
+                        this._caleventService.durationString = '4:'+mins.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false});
+
+                        if(minutes >= 300){
+                            mins = minutes;
+                            mins = mins - 300;
+                            this._caleventService.durationString = '5:'+mins.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false});
+
+                            if(minutes >= 360){
+                                mins = minutes;
+                                mins = mins - 360;
+                                this._caleventService.durationString = '6:'+mins.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false});
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
     }
 
 

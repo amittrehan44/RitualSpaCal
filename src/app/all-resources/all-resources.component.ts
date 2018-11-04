@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy, Output, EventEmitter, ViewChild, TemplateRef, OnChanges } from '@angular/core';
-import { CalendarEvent, CalendarUtils, CalendarDayViewComponent } from 'angular-calendar';
+import { CalendarEvent, CalendarUtils, CalendarDayViewComponent, CalendarMonthViewDay } from 'angular-calendar';
 
 import { Subject } from 'rxjs/Subject';
 import {
@@ -80,6 +80,9 @@ export class MyCalendarUtils extends CalendarUtils {
     .day-view-column-headers {
       display: flex;
       margin-left: 70px;
+      position: fixed; /* Set the navbar to fixed position */
+      z-index: 10;
+      margin-top: 0;
     }
     .day-view-column-header {
       width: 120px;
@@ -244,7 +247,9 @@ export const colors: any = {
 })
 export class AllResourcesComponent implements OnInit, OnChanges  {
     view: string = 'day';
-   _viewDate: Date = new Date();
+   //_viewDate: Date = new Date();
+   //Updated below to route on day click
+   _viewDate: Date;
     get viewDate(): Date {
         return this._viewDate
     }
@@ -370,6 +375,8 @@ export class AllResourcesComponent implements OnInit, OnChanges  {
             console.log(this._caleventService.selectedNote);
         });
 
+         // Updated this to implement routing on moth day click
+         this.viewDate = this._caleventService.clickedDate;
     }
 
 
@@ -749,6 +756,35 @@ export class AllResourcesComponent implements OnInit, OnChanges  {
         console.log(this.selectedNote);
 
   }
+
+  dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
+    if (isSameMonth(date, this.viewDate)) {
+        if (
+            (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
+            events.length === 0
+        ) {
+            this.activeDayIsOpen = false;
+        } else {
+            this.activeDayIsOpen = true;
+            this.viewDate = date;
+        }
+    }
+   
+    this.view= 'day';
+}
+
+//Group events in Month view 
+beforeMonthViewRender({ body }: { body: CalendarMonthViewDay[] }): void {
+    body.forEach(cell => {
+        const groups: any = {};
+        cell.events.forEach((event: CalendarEvent<{ type: string }>) => {
+            groups[event.meta.type] = groups[event.meta.type] || [];
+            groups[event.meta.type].push(event);
+        });
+        cell['eventGroups'] = Object.entries(groups);
+    });
+}
+
 
 
 }

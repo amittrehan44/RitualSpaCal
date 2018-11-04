@@ -92,6 +92,9 @@ export class CalEventsService {
         notes: "d"
     };
 
+    //variable to switch resourceview on click and use this date on ngOninit of all resources
+    clickedDate: Date = new Date();
+
     constructor(private _http: HttpClient, private firebase: AngularFireDatabase) { }
 
     /* getting data from firebase*/

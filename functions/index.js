@@ -74,6 +74,7 @@ exports.createAppointment = functions.database
                            const name = appointment.name
                            const start = DisplayCurrentTime(appointment.start)
                            const phoneNumber = appointment.phone
+                           console.log('Creating appointment for: ' + name +  ', on: ' + start )
                            if (!validE164(phoneNumber)) {
                                throw new Error('number must be E164 format!')
                            }
@@ -105,6 +106,7 @@ exports.textStatus = functions.database
                            const name = appointment.name
                            const start = DisplayCurrentTime(appointment.start)
                            const phoneNumber = appointment.phone
+                           console.log('Updating appointment for: ' + name +  ', on: ' + start )
                            if (!validE164(phoneNumber)) {
                                throw new Error('number must be E164 format!')
                            }
@@ -174,11 +176,13 @@ exports.dailySMSReminder = functions.https.onRequest((req, res) => {
             date.setHours(date.getHours() - 7)
             const getStartDate = date.toDateString()
 
-            const start = DisplayCurrentTime(childSnap.val().start)
-            const phoneNumber1 = childSnap.val().phone
+            
 
             if (getStartDate == getDate) {
-                names.push(name)
+                //names.push(name)
+
+                const start = DisplayCurrentTime(childSnap.val().start)
+                const phoneNumber1 = childSnap.val().phone
                 if (!validE164(phoneNumber1)) {
                     throw new Error('number must be E164 format!')
                 }
@@ -213,20 +217,59 @@ function validE164(num) {
     return /^\+?[1-9]\d{1,14}$/.test(num)
 }
 
+// //return date and time
+// function DisplayCurrentTime(date1) {
+//     var date = new Date(date1);
+//     //Daylight Saving Changes
+// 	////for PST nov to march - 8 and for PDT mar to nov -7
+//     date.setHours(date.getHours() - 7);
+//     var getDate = date.toDateString();
+//     var hours = date.getHours() > 12 ? date.getHours() - 12 : date.getHours();
+//     var am_pm = date.getHours() >= 12 ? "PM" : "AM";
+//     hours = hours < 10 ? "0" + hours : hours;
+//     var minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+//     var seconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+//     time = getDate + " at " + hours + ":" + minutes + " " + am_pm;
+//     //time = hours + ":" + minutes + ":" + seconds + " " + am_pm;
+//     return time;
+// }
+
+
 //return date and time
 function DisplayCurrentTime(date1) {
+    
+
+    //console.log(date1.substring(35, 56));
+    var dayLightHours = 7;
+    if (date1.substring(35, 56) == "Pacific Daylight Time" || date1.substring(35, 38) == "PDT") {
+
+        dayLightHours = 7;
+        console.log("inside daylight time if statement and dayLightHours = 7");
+    } else {
+        dayLightHours = 8;
+        console.log("inside pacific standard time if statement nd dayLightHours = 8");
+    }
+
+    //console.log(dayLightHours);
+    //console.log(date1);
     var date = new Date(date1);
+    console.log(date);
     //Daylight Saving Changes
 	////for PST nov to march - 8 and for PDT mar to nov -7
-    date.setHours(date.getHours() - 7);
+    date.setHours(date.getHours() - dayLightHours);
+   // console.log(date);
     var getDate = date.toDateString();
+    //console.log(getDate);
     var hours = date.getHours() > 12 ? date.getHours() - 12 : date.getHours();
     var am_pm = date.getHours() >= 12 ? "PM" : "AM";
+    //console.log(hours);
+    //console.log(am_pm);
     hours = hours < 10 ? "0" + hours : hours;
+    //console.log(hours);
     var minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
     var seconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
     time = getDate + " at " + hours + ":" + minutes + " " + am_pm;
     //time = hours + ":" + minutes + ":" + seconds + " " + am_pm;
+    //console.log(time);
     return time;
 }
-

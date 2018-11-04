@@ -2,6 +2,6 @@
 
     <li class="list-group-item" *ngFor="let appointment of todaysAppointment" (click)="onItemClick(appointment)">
         <!-- <strong>{{appointment.start | date: 'shortTime'}} {{appointment.stylist_title}}:  </strong> {{appointment.name}}({{appointment.phone}}){{appointment.service.name}} -->
-        <strong>{{appointment.start | date: 'shortTime'}}  </strong> {{appointment.name}}{{appointment.service.name}}
+        <strong>{{appointment.start | date: 'shortTime'}}  </strong> {{appointment.name | uppercase}}{{appointment.service.name}}
     </li>
 </ul>

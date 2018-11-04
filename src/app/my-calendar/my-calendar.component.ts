@@ -33,6 +33,8 @@ import { AuthService } from './../core/auth.service';
 import { eventsAPI } from './../app.component';
 import { Services } from './../cal-utils/services.model';
 
+import {Router} from '@angular/router';
+
 const colors: any = {
     red: {
         primary: '#ad2121',
@@ -153,7 +155,11 @@ export class MyCalendarComponent implements OnInit {
     _tempMins: number;
     _tempMinsStr: string;
 
-    constructor(public modal: NgbModal, public _caleventService: CalEventsService, public auth: AuthService) { }
+    constructor(public modal: NgbModal, 
+                public _caleventService: CalEventsService, 
+                public auth: AuthService,
+                private router: Router
+            ) { }
 
     dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
         if (isSameMonth(date, this.viewDate)) {
@@ -167,6 +173,9 @@ export class MyCalendarComponent implements OnInit {
                 this.viewDate = date;
             }
         }
+       
+         //route to all resources on month day clicked
+         this.router.navigateByUrl('/allresources');
     }
 
     eventTimesChanged({

@@ -8,3 +8,27 @@
   
 }
 
+
+.nav1 {
+  position: fixed; /* Set the navbar to fixed position */
+  top: 0; /* Position the navbar at the top of the page */
+  background-color: white;
+  z-index: 2;
+}
+
+.calHead {
+  padding-top: 20px;
+  position: fixed;
+  margin-top: 50px;
+  z-index: 1;
+  background-color: white;
+  min-height: 250px;
+  
+}
+
+
+.head2{  
+  margin-top: 250px;
+  z-index: -10000;
+  background-color: white;
+}

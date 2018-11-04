@@ -25,3 +25,20 @@ a.dropdown-item > span > input {
     .badge {
       margin-right: 5px;
     }
+
+    
+    /* Display time in day view at every strip */
+    .cal-time {
+        font-size: .9rem !important;
+        display: block !important;
+       
+        
+      }
+  
+      .cal-day-view .cal-hour:not(:last-child) .cal-hour-segment, .cal-day-view .cal-hour:last-child :not(:last-child) .cal-hour-segment {
+          border-bottom: thin dashed #77838f !important;
+      }
+
+      .cal-day-view .cal-hour-segment::after {
+        content: '' !important;
+      }

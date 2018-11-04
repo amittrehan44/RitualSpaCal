@@ -189,7 +189,7 @@
                                      [events]="events"
                                      [refresh]="refresh"
                                      [activeDayIsOpen]="activeDayIsOpen"
-                                     (dayClicked)="dayClicked($event.day)"
+                                     (dayClicked)="dayClicked($event.day, _caleventService.clickedDate = $event.day.date)"
                                      (eventClicked)="handleEvent('Clicked', $event.event)"
                                      (eventTimesChanged)="eventTimesChanged($event)"
                                      [cellTemplate]="monthCellTemplate"
